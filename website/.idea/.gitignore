@@ -6,3 +6,20 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+# Global ignores
+.idea/
+website/.idea/
+copilot-data/
+
+# IDE and tooling artifacts
+.idea/
+website/.idea/
+website/copilot-data/  # if you ever store AI-generated drafts or notes here
+
+# Teaching drafts or temp scaffolds
+website/drafts/
+website/temp-modules/
+
+
+

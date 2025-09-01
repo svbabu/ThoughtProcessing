@@ -1,0 +1,105 @@
+// Vendor base (Bootstrap logic)
+@import 'vendor/_navigation';
+
+// Custom navigation enhancements
+@import 'components/_lantern-nav';
+
+// Layout and utilities
+@import 'layout/grid';
+@import 'utilities/_spacers';
+
+
+@import 'utilities/visibility';
+@import 'utilities/z-index';
+@import 'utilities/helpers';
+//@import 'headings';
+
+
+
+.nav-bar {
+  padding: 5px 15px; /* 5px top/bottom, 15px left/right */
+}
+
+
+//23/08/25 .destiny-heading
+.destiny-heading {
+  background-color: blue;
+  color: white;
+  padding: 1px;
+  font-family: 'Open Sans', sans-serif;
+
+  &:hover {
+    background-color: blue;
+  }
+
+}
+//23/08/25 ending with .destiny-heading
+
+//23/08/25 satrt with navigation bar code by babu
+.nav-bar {
+  width: 800px;
+  margin: auto;
+  border: 2px solid #0077cc;
+  padding: 10px;
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.nav-bar a {
+  text-decoration: none;
+  color:#0077cc; //error is getting from copy from html to style.css
+  margin: 0 15px;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.nav-bar a:hover {
+  color: #0077cc;
+}
+//23/08/25 ends with navigation bar code by babu
+.row {
+  display: flex; // ensures proper alignment
+  flex-wrap: wrap; // allows columns to wrap instead of overlap
+  margin-right: -15px;
+  margin-left: -15px;
+}
+
+.col {
+  flex: 1 0 0%; // allows flexible growth
+  padding: 0 15px; // restores spacing
+  min-width: 0; // prevents overflow from long content
+}
+
+//overlapping images column with row
+
+.item {
+  background: rgba(165, 159, 159, 0.25);
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.col-md-6 {
+  flex: 0 0 40%;
+  min-width: 250px;
+}
+// Add a gentle buffer
+/*.overlapping-element {
+  margin-bottom: 0.5rem;
+  z-index: 2;
+  position: relative;
+}*/
+.right-accent {
+  background-color: rgba(255, 190, 51, 0.99); // or a softer variant
+  grid-column: 4 / span 1; // or flex-basis if using flexbox
+  padding: 1rem;
+}
+
+

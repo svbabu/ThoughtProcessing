@@ -10,8 +10,8 @@
         }, 1);
     };
     spinner();
-    
-    
+
+
     // Initiate the wowjs
     new WOW().init();
 
@@ -30,19 +30,19 @@
     $(".navbar-nav a").on('click', function (event) {
         if (this.hash !== "") {
             event.preventDefault();
-            
+
             $('html, body').animate({
                 scrollTop: $(this.hash).offset().top - 45
             }, 1500, 'easeInOutExpo');
-            
+
             if ($(this).parents('.navbar-nav').length) {
                 $('.navbar-nav .active').removeClass('active');
                 $(this).closest('a').addClass('active');
             }
         }
     });
-    
-    
+
+
     // Back to top button
     $(window).scroll(function () {
         if ($(this).scrollTop() > 300) {
@@ -55,7 +55,7 @@
         $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
         return false;
     });
-    
+
 
     // Typed Initiate
     if ($('.typed-text-output').length == 1) {
@@ -121,6 +121,80 @@
         loop: true,
     });
 
-    
+
 })(jQuery);
+
+//javascript
+
+/*function toggleNote(el) {
+const extra = el.nextElementSibling;
+if (extra.classList.contains('hidden')) {
+extra.classList.remove('hidden');
+extra.classList.add('visible');
+el.textContent = 'Read less';
+} else {
+extra.classList.remove('visible');
+extra.classList.add('hidden');
+el.textContent = 'Read more';
+}
+}*/
+/*function toggleNote(el) {
+    const extra = el.nextElementSibling;
+    extra.classList.toggle('visible');
+    el.textContent = extra.classList.contains('visible') ? 'Read less' : 'Read more';
+}*>
+
+/* document.querySelectorAll('.read-more-toggle').forEach(toggle => {
+    toggle.addEventListener('click', function () {
+        const note = this.closest('.welcome-logo1').querySelector('.extra-note');
+        note.classList.toggle('visible');
+        this.textContent = note.classList.contains('visible') ? 'Read less' : 'Read more';
+    });
+});*/
+function toggleNote(el) {
+    const extra = el.parentElement.nextElementSibling;
+    extra.classList.toggle('visible');
+    extra.classList.toggle('hidden');
+    el.textContent = extra.classList.contains('visible') ? 'Read less' : 'Read more';
+}
+
+
+<!-- test-->
+/*<script src="js/typed.js"></script>
+
+document.addEventListener("DOMContentLoaded", function () {
+    const typed = new Typed(".typed-text-output", {
+        stringsElement: ".typed-text",
+        typeSpeed: 50,
+        backSpeed: 30,
+        loop: true,
+        onBegin: function () {
+            document.querySelector(".typed-text-output").classList.add("fade-in");
+        }
+    });
+});
+
+
+
+
+
+
+console.log("Typed.js script loaded");
+
+new Typed(".typed-text-output", {
+    stringsElement: ".typed-text",
+    typeSpeed: 50,
+    backSpeed: 30,
+    loop: true
+});
+
+document.querySelector(".typed-text-output").innerHTML = "";*/
+
+
+
+
+
+
+
+
 

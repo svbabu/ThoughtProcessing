@@ -2,7 +2,7 @@
 :root {
   --primary: #6244C5;
   --secondary: #FFC448;
-  --light: #FAFAFB;
+  --light: rgba(122, 125, 131, 0.1);
   --dark: #12141D;
 }
 
@@ -106,7 +106,7 @@
 /*** Header ***/
 #home {
   margin-bottom: 6rem;
-  background: url(../img/bg-header.png) left top no-repeat;
+  background: url(../img/bg-header.png) right top no-repeat;
 }
 .custom-heading {
     color: rgba(127, 145, 135, 0.29);
@@ -125,7 +125,7 @@
     background-image: url('../img/profile.png');
     background-size: contain;
     background-repeat: no-repeat;
-    background-position: center;
+    background-position:left center;
     min-height: 100vh; /* ensures full viewport height */
     display: flex;
     align-items: center;
@@ -801,11 +801,79 @@ padding: 1rem;
 
 .typed-text-output {
     font-size: 1.5rem;
-    color: #444;
+    color: rgba(39, 89, 213, 0.99);
     font-weight: 500;
     margin-bottom: 1rem;
     animation: fadeIn 1s ease-in;
 }
+.extra-content{
+    argin-top: 10px;
+    font-size: 15px;
+    color: rgb(239, 2, 29);
+    text-align: left;
+    line-height: 1.6;
+    padding: 0 8px;
+}
+/5/9/25
+
+.typed-text-output {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 1.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+
+
 
 
 /*animation*/
+/*rowfrontheadline-9/5/25*/
+.row-frontheadline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  max-width: 320px;
+  height: auto;
+}
+
+.row-frontheadline img {
+  display: block;
+  max-width: 960px;
+  max-height: 280px;
+  object-fit: cover;
+  width:100%
+  height: auto;
+  margin-bottom: 0.5rem;
+}
+
+.image-caption {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+  color: #444;
+  text-align: center;
+  line-height: 1.4;
+}
+/*Optional: Add Media Queries for Smaller Screens*/
+
+@media (max-width: 600px) {
+  .row-frontheadline {
+    padding: 0.5rem;
+  }
+
+  .image-caption {
+    font-size: 0.9rem;
+  }
+}
+
+
+
+

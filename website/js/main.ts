@@ -1,5 +1,7 @@
 //import { initTypedText } from '../src/typed/typed-init';
 import { initTypedText } from '../../src/typed/typed-init'; // adjust path as needed
+import Typed from 'typed.js';
+
 
 /*
 document.addEventListener("DOMContentLoaded", () => {

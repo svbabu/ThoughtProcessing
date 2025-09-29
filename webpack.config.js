@@ -1,59 +1,56 @@
-import path from 'path';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-export default {
-  entry: path.resolve('src/main.tsx'),
+module.exports = {
+  entry: './src/main.tsx',
   output: {
     filename: 'bundle.js',
-    path: path.resolve('dist'),
-    publicPath: '/ThoughtProcessing',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true,
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.resolve('website/index.html'),
-    }),
-  ],
-  devServer: {
-    static: {
-      directory: path.resolve('dist'),
+    stats: {
+        colors: true,
+        reasons: true,
+        errorDetails: true
     },
-    port: 3000,
-    open: true,
-    hot: true,
-    liveReload: false,
-    // client: {
-    //   overlay: false,
-    // },
+
+
+    resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+    alias: {
+      '@img': path.resolve(__dirname, 'src/assets/img'),
+    },
   },
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
+        test: /\.tsx?$/,
         use: 'ts-loader',
         exclude: /node_modules/,
       },
       {
-            test: /\.(png|jpe?g|gif|svg)$/i,
-            type: 'asset/resource', // ✅ tells Webpack to emit the file and return its URL
-            generator: {
-                       filename: 'assets/img/[name][ext]',
-                     },
-       },
-       {
-             test: /\.css$/i,
-             use: ['style-loader', 'css-loader'],
-           },
-
-
-
-],
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg|jpg)$/i,
+        type: 'asset/resource',
+      },
+    ],
   },
-  resolve: {
-    alias: {
-     '@img': path.resolve(__dirname, 'src/assets/img'),
-
- // ✅ alias now included
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+    }),
+  ],
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'public'),
     },
-    extensions: ['.tsx', '.ts', '.js', '.json', '.png'],
+    historyApiFallback: true,
+    port: 8080,
+    open: true,
   },
+  devtool: 'source-map',
+  mode: 'development',
 };

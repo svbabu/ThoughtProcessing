@@ -1,7 +1,7 @@
 // src/types/typed-js.d.ts or src/typed/typed-js.d.ts
 //import Typed from 'typed.js';
 // src/types/typed-js.d.ts
-declare module 'typed.js' {
+/* declare module 'typed.js' {
     export default class Typed {
         constructor(selector: string, options: {
             strings: string[];
@@ -14,7 +14,14 @@ declare module 'typed.js' {
             onBegin?: () => void;
         });
     }
+} */
+declare module 'typed.js' {
+  export default class Typed {
+    constructor(el: string | Element, options: any);
+    destroy(): void;
+  }
 }
+
 
 
 

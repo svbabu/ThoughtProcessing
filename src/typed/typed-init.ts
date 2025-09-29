@@ -13,11 +13,10 @@ export function initTypedText(selector: string, roles: string[]) {
         loop: true
     });
 }
+ */
 
 
-*/
-
-// typed-init.ts
+//typed-init.ts
 
 
 

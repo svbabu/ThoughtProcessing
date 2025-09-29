@@ -45,6 +45,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });*/
 
 
+/*
 export function initTypedText(selector:  string, roles: string[]) {
     new Typed(selector, {
         strings: roles,
@@ -55,11 +56,12 @@ export function initTypedText(selector:  string, roles: string[]) {
         showCursor: true,
         cursorChar: '!'
     });
-}
+})
+*/
 
 
 
-
+/*
 console.log("Typed.js script loaded");
 
 /*new Typed(".typed-text-output", {
@@ -72,21 +74,7 @@ console.log("Typed.js script loaded");
 
 
 
-/*document.querySelector(".typed-text-output").innerHTML = "";
 
-const el = document.querySelector('.typed-text-output');
-if (el) {
-    el.innerHTML = '';
-    new Typed('.typed-text-output', {
-        strings: roles,
-        typeSpeed: 180,
-        backSpeed: 100,
-        loop: true,
-        backDelay: 500,
-        showCursor: true,
-        cursorChar: '|'
-    });*/
-}
 
 
 

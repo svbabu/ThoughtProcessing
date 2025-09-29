@@ -1,0 +1,896 @@
+/* Root container for React layout */
+/*
+.tp-react-root .navbar {
+display: none;
+  transition: 0.5s;
+
+}
+.tp-react-root .navbar .navbar-nav .nav-link {
+  padding: 20px 15px;
+  color: var(--dark);
+  font-size: 18px;
+  font-weight: 600;
+  outline: none;
+}
+
+.tp-react-root .navbar .navbar-nav .nav-link:hover,
+.navbar .navbar-nav .nav-link.active {
+  color: var(--primary);
+}
+
+@media (max-width: 991.98px) {
+  .tp-react-root .navbar .navbar-nav .nav-link  {
+    padding: 10px 0;
+  }
+}
+
+*/
+
+
+/*.tp-react-root {
+  font-family: 'Great Vibes', cursive;
+  color: white;
+}*/
+
+.tp-react-root .nav-bar {
+   display: flex;
+    justify-content: space-between; /* or use center/start/end */
+    flex-wrap: wrap;                /* allows wrapping if needed */
+    gap: 0rem;                      /* spacing between links */
+   padding: 1rem ;
+
+ width: 150%;
+
+
+
+    background-color:orange;      /* optional styling */
+
+
+}
+
+.tp-react-root .nav-bar a {
+  text-decoration: none;
+  color: white;
+  font-weight: 600;
+  transition: color 0.3s ease;
+  padding:0px;
+}
+
+.tp-react-root .nav-bar a:hover {
+  color: #007bff;
+}
+
+.tp-react-root .nav-bar-wrapper {
+  display: flex;
+  align-items: center; /* vertical alignment */
+  gap: 0rem; /* spacing between image and nav */
+  margin-bottom: 0;     /* Remove extra spacing */
+    padding-bottom: 0;
+
+}
+
+.tp-react-root .family-image {
+  width: 100px;
+  height: 50px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+.tp-react-root .codeheartlove-image{
+ width:100px;
+
+  height:50px;
+  border-radius: 2px;
+  object-fit: cover;
+  color:orange
+  }
+
+
+.tp-react-root .nav-caption {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 0rem;
+    margin-bottom: 0rem;
+    margin-left: 0rem;
+    margin-right: 0rem;
+}
+.tp-react-root .welcome-message {
+  font-size: 1.2rem;         /* Increase font size for readability */
+    line-height:2rem;          /* Add breathing space between lines */
+    max-width: 900px;          /* Stretch paragraph width */
+    margin-top: 6rem;       /* Center horizontally with spacing */
+    margin-bottom: 0rem; /* reduce if needed */
+    margin: 0 auto;        /* Horizontally centers the block */
+    /*margin-left: 11rem;
+    margin-right: 0rem;*/
+    width:100%;
+    color: #bc3343;
+     background-color:#ffffff; /* soft amber */
+     padding:0rem;
+      border-radius: 2px;
+text-align: center;
+    font-family: 'Great Vibes', Arial;
+
+}
+
+.tp-react-root .brand-name {
+  font-weight: 600;
+  color: #2e8b57;
+}
+
+.tp-react-root .highlight {
+  font-style: italic;
+  color: #d2691e;
+}
+
+.tp-react-root .metaphor {
+  font-weight: 500;
+  color: #6a5acd;
+}
+
+
+
+
+
+
+
+/* Destiny heading styles */
+.tp-react-root h2.destiny-heading {
+  width: 100%;              /* full horizontal stretch */
+   /* display: block; */          /* ensures it behaves like a block-level element */
+    margin: 0;                /* removes centering or spacing */
+    padding: 0;     /* optional horizontal breathing room */
+    margin-bottom: 0;
+      padding-bottom: 0;
+    box-sizing: border-box;  /* includes padding in width calculation */
+    background-color: rgba(255, 190, 51, 0.99);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 300;
+    font-family: 'Great Vibes', Dubai;
+    transition: background-color 0.3s ease;
+
+
+
+
+&:hover {
+  background-color: orangered;
+}
+}
+/*
+body,
+.tp-react-root,
+*/
+.tp-react-root {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+.tp-react-root, .welcome-section {
+  margin-top: 0;
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+  width: 100%;
+  gap:0;
+
+}
+.tp-react-root .two-column-row {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;   /*justify-content:flex-start;  justify-content:space-between;*/
+      justify-content: stretch;
+      max-height: 100vh; /* or a fixed px/rem value */
+      overflow-y: auto;
+      gap: 0;
+      width: 100%;
+      box-sizing: border-box;
+      background: linear-gradient(to right, #fff 45%, #f9f9f9 55%);
+
+}
+.tp-react-root .destiny-column {
+  flex: 1 1 70%;
+
+
+
+
+
+  min-width: 300px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 0rem;
+  color:#ffffcc;
+  order:2;
+
+}
+.tp-react-root .welcome-logo-column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 0 0%;
+  min-width: 100px;
+  width:60%;
+   box-sizing: border-box;
+
+
+  /*margin: 0;
+  margin-left: 0;
+  margin-right: 0;
+
+  padding: 0;
+  padding-left: 0;
+  padding-right: 0;
+
+*/
+
+
+}
+/*
+ .tp-react-root .welcome-logo-column {
+display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+
+   justify-content: flex-start;
+   gap: 0rem;
+   margin-top: 0rem;
+   flex: 1 1 60%;              *//* flexible width, prevents stacking *//*
+   min-width: 300px;
+   margin: 0;
+   padding: 0;
+   margin-top: 0;
+   padding-top: 0;
+   vertical-align: top;
+   order:1;*/
+ /*.row {
+   margin-left: 0;
+   margin-right: 0;
+ }*/
+
+ /*.col-md-3,
+ .col-md-9 {
+   padding-left: 0;
+   padding-right: 0;
+ }*/
+/*.handshake-row img {
+  max-width: 50%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  padding: 0.5rem 0;
+}
+
+.tp-react-root .handshake-row {
+  max-height: 200px; *//* or adjust as needed *//*
+  overflow: hidden;
+  order:2;
+}*/
+
+
+
+
+
+
+
+/* Welcome logo container */
+
+.tp-react-root .welcome-logo {
+  float: left;
+  margin-top: 0px;
+  margin-right: 0px;
+  width: 145px;
+  background-color:white;/*rgba(255, 190, 51, 0.99);*/
+  color: white;
+  font-family:arial;
+  line-height:1.25rem;
+
+
+
+
+}
+
+
+/* Logo image styling */
+.tp-react-root .welcome-logo img {
+  width:125%;
+  height:auto;
+  border-radius: 2px; /* optional: soft edges */
+
+
+}
+
+.tp-react-root .logo-card {
+    margin-bottom: 1rem;
+}
+.tp-react-root .logo-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+
+
+}
+
+.tp-react-root .logo-caption {
+    margin-top: 0.5rem;
+
+    font-style:normal;
+    color: #444;
+}
+
+/* Optional: column layout for multiple logos */
+.tp-react-root .image-caption {
+  margin-top: 0rem;
+  font-size: 0rem;
+  line-height:1.25rem;
+
+  text-align: left;
+
+}
+
+.tp-react-root .centered-text.navbar-brand-text {
+  color: red;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+/* imgcap-endline*/
+.tp-react-root .extra-content h4 {
+  font-weight: 500;
+  color: #444;
+  margin-top: 2rem;
+  animation: flicker 1.5s infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.tp-react-root .flicker-headline {
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+.tp-react-root .flicker-lady-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  border-top: 1px dashed #ccc;
+  text-align: left;
+}
+
+.tp-react-root .flicker-lady-section h4 {
+  font-weight: 500;
+  color:purple;
+  margin-bottom: 1rem;
+}
+
+
+.tp-react-root .flicker-lady-section img {
+  /*width: 150px;       *//* or use max-width: 100% for responsiveness *//*
+  height:150;
+  border-radius:8px; *//* optional: softens edges *//*
+  object-fit: cover;   ensures clean cropping if needed */
+   margin-top: 1px;
+    margin-right: 40px;
+    width: 140px;
+    background-color: red;
+    text-align:left;
+}
+.tp-react-root .welcome-row3
+{display: flex;
+    flex-direction:row;
+    row-align:top;
+    flex-wrap: wrap;
+    justify-content:left;
+    align-items:flex-start;
+    padding: 0;
+    margin: 0 ;
+    margin-bottom: 0;
+    padding-bottom: 0;
+
+
+
+    /*box-sizing:border-box;*/
+
+    border-radius: 2px;
+    top:0;
+    position:relative;
+}
+
+.tp-react-root .welcome-row2{
+display: flex;
+ flex-direction:row;
+ row-align:top;
+   flex-wrap: wrap;
+   justify-content:left;
+   align-items:flex-start;
+   padding: 0;
+   margin: 0 ;
+   margin-bottom: 0;
+     padding-bottom: 0;
+
+
+
+   /*box-sizing:border-box;*/
+
+   border-radius: 2px;
+   top:0;
+    position:relative;
+}
+
+.tp-react-root .welcome-row1
+{
+display: flex;
+ flex-direction:row;
+ row-align:top;
+   flex-wrap: wrap;
+   justify-content:left;
+   align-items:flex-start;
+   padding: 0;
+   margin: 0 ;
+   /*box-sizing:border-box;*/
+   background-color: #fef6e4;
+   border-radius: 2px;
+   top:0;
+    position:relative;
+}
+
+.tp-react-root .welcome-row {
+ display: flex;
+ flex-direction:row;
+ row-align:top;
+   flex-wrap: wrap;
+   justify-content:left;
+   align-items:flex-start;
+   padding: 0;
+   margin: 0 ;
+   margin-bottom: 0;
+   padding-bottom: 0;
+     /*box-sizing:border-box;*/
+   background-color: #fef6e4;
+   border-radius: 2px;
+   top:0;
+    position:relative;
+/*
+display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;*/
+
+
+
+
+
+}
+.tp-react-root .welcome-row img {
+    width: 200px;
+    height: auto;
+    margin: 2px;
+    border-radius: 12px;
+    border: 1px solid #fff; /* subtle separation */
+    box-shadow: 0 0 2px rgba(0,0,0,0.1); /* gentle lift */
+     /*display: block; *//* removes baseline spacing */
+
+
+}
+.tp-react-root .welcome-logo1 {
+  /* display: flex;
+     flex-direction: column;
+     align-items: flex-start; *//* or center *//*
+     justify-content: flex-start;
+     gap: 0.4rem; *//* gentle spacing between image and text *//*
+     width:100%;
+*/
+      display: flex;
+      flex: 1 1 70%;
+       max-width:25%;
+       flex-wrap: wrap;
+     /*background: #fff;*/
+       background:#ffffcc;
+       padding:0rem;
+       /*padding: 10px;*/
+       border-radius: 2px;
+       box-shadow: 0 3px 9px rgba(27, 72, 161, 0.1);
+       transition: all 0.2s ease;
+       color:blue;
+       margin: 0 ;
+       margin-top:0;
+       margin-bottom:0;
+       margin-left:0;
+       flex-direction: column;
+       justify-content: flex-start;
+      /* justify-content: space-between;*/
+       min-height:100px; /* Ensures consistent height */
+
+
+       font-size: 1rem;
+
+
+
+
+
+}
+
+
+
+.tp-react-root .welcome-logo1 img {
+     width:100%;
+    height: auto;
+     object-fit: cover;
+     border-radius: 2px;
+     border: 2px solid #fff;
+     box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+
+line-height: 1.2rem;
+
+
+
+}
+.tp-react-root .image-block {
+  display: flex;
+    flex-direction: column;
+    align-items:flex-start; /* center image and text horizontally */
+    justify-content: left;
+    text-align: left;
+    gap: 0.5rem;
+    line-height: 0.90rem;
+    margin: 0;
+   padding: 0;
+  flex-wrap: wrap;
+  align-content: flex-start;
+
+
+
+
+  /* overflow: hidden;*/
+
+
+
+
+    }
+
+.destiny-column .logo-text {
+  line-height: 1.2; /* or 1.4 for gentle breathing */
+  margin: 0;
+}
+
+
+
+
+
+
+
+.tp-react-root .image-caption {
+   margin-top: 0px;
+   margin-bottom: 0px;
+   font-size: 14px;
+    color: black;
+    text-align: center;
+    font-style:normal;
+     font-weight: bold;
+}
+
+.tp-react-root .image-note {
+  margin-top: 0px;
+  margin-bottom: 0px;
+
+      font-size: 15px;
+      color: purple;
+      text-align: left;
+      line-height: 1.0rem;
+      padding: 0 8px;
+      font-style:normal;
+      margin: 0;
+
+
+}
+
+.tp-react-root .read-more-toggle {
+      color:red;
+      cursor: pointer;
+      font-weight: bold;
+      margin-left:1px;
+}
+
+.tp-react-root .extra-note {
+   max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+      display: block;
+      color:purple;
+}
+.extra-note.visible {
+    max-height: 300px; /* Adjust based on your longest note */
+}
+.tp-react-root .extra-note.hidden {
+    display: none;
+}
+
+
+.tp-react-root .welcome-logo1::after {
+    content: '';
+    flex-grow: 1;
+}
+/* .image-note:read-more-toggle*/
+
+/* image over lapping with column and row*/
+.tp-react-root .item {
+    background: rgba(165, 159, 159, 0.25);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+
+.tp-react-root .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.tp-react-root .col-md-6 {
+    flex: 0 0 48%;
+    min-width: 300px;
+}
+
+.tp-react-root .item {
+    background: rgba(165, 159, 159, 0.25) !important;
+}
+
+
+/*9/17/25/about*/
+.tp-react-root .about-section {
+  display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    padding: 2rem;
+    flex-wrap: wrap;
+     align-content: flex-start;
+  background-color:#ffffcc;
+
+}
+.tp-react-root .about-text {
+   flex: 1 65%;
+    min-width: 100px;
+   color:purple;
+
+}
+.tp-react-root .about-images {
+  flex: 1 1 20%;
+  flex-direction: row;
+   display: flex;
+   flex-direction: column;
+   gap: 0rem;
+   min-width: 300px;
+   width:100%
+
+
+}
+/*skills and experiance*/
+
+.tp-react-root .skills-experience-wrapper {
+  padding: 2rem;
+  background-color:purple;
+}
+
+.tp-react-root .section-title {
+  font-size: 1.5rem;
+  margin-bottom:0rem;
+}
+
+.tp-react-root .intro-text {
+  font-size: 1rem;
+  margin-bottom: 0rem;
+
+}
+
+.tp-react-root .skills-experience-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
+
+
+}
+
+.tp-react-root .skills-block, .experience-block {
+  flex: 1 1 45%;
+  min-width: 300px;
+   background-color:red;
+}
+
+.tp-react-root .table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+
+}
+
+.tp-react-root .th, td {
+  border: 1px solid #ccc;
+  padding: 0.75rem;
+
+ background-color:purple;
+}
+
+.tp-react-root .thead th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+/* services*/
+.tp-react-root .service-section {
+  background-color:purple;
+  padding: 4rem 0;
+}
+
+.tp-react-root .service-item {
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease;
+   background-color:purple;
+   color:black;
+}
+
+.tp-react-root .service-item:hover {
+ background-color:red;
+  transform: translateY(-5px);
+}
+/*Contact*/
+.tp-react-root .form-bg {
+  background-color: purple;
+}
+
+
+
+
+
+/*tp-react-root .skills-experience-section {
+  display: flex;
+  flex-direction: row;
+   align-content: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding: 2rem;
+  background-color:#ffffcc;
+}
+
+.tp-react-root .skills-column, .experience-column {
+  flex: 1 1 45%;
+  flex-wrap: wrap;
+  min-width: 300px;
+   background-color:orange;
+    gap: 0rem;
+    line-height:0rem;
+     margin-top:0rem;
+}
+
+.tp-react-root .skills-table, .experience-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0rem;
+}
+
+.tp-react-root .skills-table th, .skills-table td,
+.experience-table th, .experience-table td {
+  border: 1px solid #ccc;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.tp-react-root .skills-table th, .experience-table th {
+  background-color: black;
+  font-weight: bold;
+}
+
+
+
+*/
+
+/*.tp-react-root .right-accent {
+    background-color: #fdd835; *//**//* or a softer variant*//**//*
+grid-column: 4 / span 1;*/ /*//*/ /*or flex-basis if using flexbox*/
+/*padding: 1rem;
+}*/
+/*animation*//*
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}*/
+/* 9/12*/
+
+/*.tp-react-root .welcome-grid {
+  display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: 300px; *//* or any fixed height *//*
+    gap: 2rem;
+
+
+}
+.tp-react-root .grid-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}*/
+
+/*.col-2 {
+  max-height: 300px;
+  overflow: hidden;
+}*/
+/* Navbar already provides spacing */
+
+/*.col-6{
+display:flex;
+flex-direction:column;
+ padding:2rem;
+  margin:top;
+
+}*/
+
+/*13/9/25*/
+/*
+.tp-react-root .image-block {
+  max-width: 100%;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.tp-react-root .image-caption {
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.tp-react-root .image-note {
+  font-style: italic;
+  margin-top: 0.5rem;
+}
+
+.tp-react-root .extra-note {
+  margin-top: 0.5rem;
+  color: #555;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+.tp-react-root .extra-note.visible {
+  max-height: 200px;
+*/
+/* or auto with JS height calc */
+
+
+ /* opacity: 1;
+}*/
+
+
+
+/*** Service ***/
+/*
+.tp-react-root .service-item .bg-icon {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url(@img/bg-icon.png) center center no-repeat;
+  */
+/*background-size: cover;*//*
+
+}
+*/
+
+
+
+

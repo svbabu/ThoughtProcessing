@@ -35,21 +35,22 @@ useEffect(() => {
 
   return (
       <div className="flicker-lady-section">
-    <h4>!--@End!-----------&gt;</h4>
+      <h4>!--@End!-----------&gt;</h4>
       <h4>Hi, I'm not supposed to be here!</h4>
 
       <img className="img-fluid" src={profileimg} alt="Flicker Lady" />
-        <a href="resume-sample.pdf" className="btn btn-primary py-0 px-4 me-2" download title="Download my Java profile">
+        <a href="resume-sample.pdf" className="btn btn-primary py-0 px-4 me-2" download title="Download my Java profile"
+        style={{backgroundColor:'red'}}>
                          Download CV
               </a>
-       <div className="row g-0 align-items-left" style={{backgroundColor:'rebeccapurple'}}>
-               <h5 className="text-primary mb-0">I'm</h5>
-              <h5 className="text-primary mb-0">S.V.Babu</h5>
+       <div className="row g-0 align-items-left" style={{backgroundColor:'white'}}>
+               <h5 className="text-primary mb-0" >I'm</h5>
+              <h5 className="text-primary mb-0" >S.V.Babu</h5>
               </div>
                <h2 className="typed-text-output d-inline"></h2>
                <div className="typed-text d-none" >Web Designer, Web Developer,
                 Front End Developer , Apps Designer, Apps Developer</div>
-               <h2 className="typed-text-output d-inline"  style={{backgroundColor:'darkgray'}}>
+               <h2 className="typed-text-output d-inline"  style={{backgroundColor:'white'}}>
                  <span ref={typedRef}></span>
                </h2>
          {/* <div className="ms-sm-4"  style={{ backgroundColor:'orange'}}>

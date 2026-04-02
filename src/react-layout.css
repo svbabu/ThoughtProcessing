@@ -43,7 +43,7 @@ display: none;
 
 
 
-    background-color:orange;      /* optional styling */
+    background-color:purple;      /* optional styling 30th apr 2026*/
 
 
 }
@@ -71,8 +71,8 @@ display: none;
 
 .tp-react-root .family-image {
   width: 100px;
-  height: 50px;
-  border-radius: 2px;
+  height: 56px;
+  border-radius: 0px;
   object-fit: cover;
 }
 .tp-react-root .codeheartlove-image{
@@ -118,7 +118,8 @@ text-align: center;
 }
 
 .tp-react-root .highlight {
-  font-style: italic;
+  /*font-style: italic;*/
+  font-style: arial;
   color: #d2691e;
 }
 
@@ -142,7 +143,8 @@ text-align: center;
     margin-bottom: 0;
       padding-bottom: 0;
     box-sizing: border-box;  /* includes padding in width calculation */
-    background-color: rgba(255, 190, 51, 0.99);
+   /* background-color: rgba(255, 190, 51, 0.99);*/
+   background-color: purple;
     color: white;
     font-size: 1.5rem;
     font-weight: 300;
@@ -343,8 +345,9 @@ display: flex;
 }
 /* imgcap-endline*/
 .tp-react-root .extra-content h4 {
-  font-weight: 500;
-  color: #444;
+  font-weight: 400;
+/*  color: #444;*/
+color: black;
   margin-top: 2rem;
   animation: flicker 1.5s infinite;
 }
@@ -355,7 +358,7 @@ display: flex;
 }
 
 .tp-react-root .flicker-headline {
-  font-weight: 500;
+  font-weight: 300;
   color: #444;
   margin-bottom: 1rem;
 }
@@ -369,7 +372,7 @@ display: flex;
 
 .tp-react-root .flicker-lady-section h4 {
   font-weight: 500;
-  color:purple;
+  color:red;
   margin-bottom: 1rem;
 }
 
@@ -661,6 +664,33 @@ line-height: 1.2rem;
   background-color:#ffffcc;
 
 }
+.tp-react-root .home-section {
+  display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    padding: 2rem;
+    flex-wrap: wrap;
+     align-content: flex-start;
+  background-color:#ffffcc;
+
+}
+.tp-react-root .home-text {
+   flex: 1 65%;
+    min-width: 100px;
+   color:purple;
+
+}
+.tp-react-root .home-images {
+  flex: 1 1 20%;
+  flex-direction: row;
+   display: flex;
+   flex-direction: column;
+   gap: 0rem;
+   min-width: 300px;
+   width:100%
+
+
+}
 .tp-react-root .about-text {
    flex: 1 65%;
     min-width: 100px;
@@ -749,6 +779,685 @@ line-height: 1.2rem;
 .tp-react-root .form-bg {
   background-color: purple;
 }
+.tp-react-root .mobile-tall {
+    min-height: 500px;
+}
+
+.tp-react-root .discount-overlay {
+    position:absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #28a745;
+    color: white;
+    padding: 6px 12px;
+    font-weight: bold;
+    border-radius: 4px;
+    font-size: 14px;
+    z-index: 2;
+}
+.tp-react-root .offer-label {
+    color: #FFD700;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+.tp-react-root .offer-label.new-year {
+    color: #FFD700;
+    font-weight: bold;
+}
+
+.tp-react-root .offer-label.diwali {
+    color: #FF69B4;
+    font-style: italic;
+}
+
+.tp-react-root .static-offer-block {
+    background-color: #fff8e1;
+    border: 2px solid #ff7043;
+    border-radius: 12px;
+    padding: 20px;
+    width: 280px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 10px auto;
+
+
+}
+
+.tp-react-root .static-offer-block:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(51, 109, 255, 0.99);
+    cursor: pointer;
+}
+
+.tp-react-root .category-heading {
+    font-size: 1.6rem;
+    font-weight: bold;
+    text-decoration: underline;
+    color: rgba(122, 112, 112, 0.25);
+    margin-bottom: 8px;
+}
+
+.tp-react-root .offer-text {
+    font-size: 1.2rem;
+    color: rgba(122, 112, 112, 0.25);
+    font-weight: 500;
+}
+.tp-react-root .festival-label {
+    font-size: 0.9rem;
+    color: rgba(122, 112, 112, 0.25);
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+
+.tp-react-root .seasonal-badge {
+    display: inline-block;
+    background-color: #ff7043;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    margin-top: 10px;
+}
+.tp-react-root .subtext {
+    font-size: 0.9rem;
+    color: rgb(204, 170, 0);
+    margin-top: 6px;
+    font-style: italic;
+}
+.tp-react-root .static-offer-block {
+    border: 2px dashed rgba(51, 109, 255, 0.99);
+    box-shadow: 0 0 12px rgba(255, 152, 0, 0.3);
+}
+
+.tp-react-root .promo-box {
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgba(255, 238, 51, 0.99);
+    border-radius: 12px;
+    padding: 20px;
+    width: 280px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin: 10px auto;
+    position: relative;
+    cursor: pointer;
+}
+
+.tp-react-root .promo-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(122, 125, 131, 0.1);
+}
+
+.tp-react-root .promo-badge {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    background-color: #ffffff;
+    color: rgba(255, 51, 82, 0.99);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.tp-react-root .promo-title {
+    font-size: 1.6rem;
+    font-weight: bold;
+    /*text-decoration: underline;*/
+    color: rgba(255, 51, 82, 0.99);
+    margin-bottom: 8px;
+}
+
+.tp-react-root .promo-festival {
+    font-size: 0.9rem;
+    color: rgba(51, 109, 255, 0.99);
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.tp-react-root .promo-subtext {
+    font-size: 0.85rem;
+    color: rgba(51, 109, 255, 0.99);
+    font-style: italic;
+    margin-top: 4px;
+}
+
+.tp-react-root .promo-offer {
+    font-size: 1.2rem;
+    color: rgba(255, 51, 82, 0.99);
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.tp-react-root .laptop-page > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+}
+
+
+.tp-react-root .cart-link{
+ background-color: purple;
+
+
+  color: #f57c00;
+  font-weight: bold;
+  padding: 6px 12px;
+  border-radius: 2px;
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.tp-react-root .cart-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.tp-react-root .cart-image {
+    width: 80px;
+    height: auto;
+    border-radius: 6px;
+}
+
+.tp-react-root .cart-details h4 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.tp-react-root .cart-details p {
+    margin: 4px 0;
+    color: #555;
+}
+
+.tp-react-root button {
+    background-color: #f57c00;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.tp-react-root .grecaptcha-badge {
+    bottom: 10px !important;
+    right: 10px !important;
+    z-index: 9999;
+}
+/*.tp-react-root .grecaptcha-badge {
+    visibility: hidden;
+}*/
+
+.tp-react-root .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.tp-react-root .auth-card {
+    background:gray;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.tp-react-root .auth-card h1 {
+    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+}
+
+.tp-react-root .auth-card input {
+    width: 75%;
+    padding: 0.75rem;
+    margin: 0.5rem 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.tp-react-root .auth-card button {
+    .auth-card button {
+        position:relative;
+        top: 1rem;
+        right: 1rem;
+        background: transparent;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+
+    }
+
+
+}
+
+.tp-react-root .auth-card button:hover {
+    background-color: #0056b3;
+}
+
+.tp-react-root @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.tp-react-root .error-text {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+
+.tp-react-root input[type="text"],
+.tp-react-root input[type="tel"] {
+    width: 60%;
+    max-width: 100%;
+    padding: 8px 12px;
+    font-size: 16px;
+}
+/*checkout laout*/
+/*
+.tp-react-root .two-column-row {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem; !* spacing between columns *!
+    align-items: flex-end;
+}
+
+.tp-react-root .checkout-column {
+    flex: 1;
+    padding: 1rem;
+}
+
+.tp-react-root .left-column {
+    max-width: 60%;
+}
+
+.tp-react-root .right-column {
+    max-width: 40%;
+    background-color: #f9f9f9;
+    border-left: 1px solid #ddd;
+}
+
+*/
+.tp-react-root .checkout-columns {
+   /* display: flex;
+    flex-direction: row;
+    gap: 4rem;
+    padding: 2rem;*/
+     display: flex;
+      flex-direction: row;
+     /* gap: 20px;*/
+      gap: 4rem;
+      align-items: flex-start; /* keeps both columns aligned at the top */
+
+
+}
+
+.tp-react-root .left-column {
+    flex: 2;                /* wider than right */
+     min-width: 0;           /* prevents overflow */
+     max-height: none;       /* remove fixed height */
+     overflow-y: visible;    /* no inner scrollbar */
+      padding: 4rem;
+
+
+}
+
+.tp-react-root .right-column {
+ /*flex: 1; *//* or let sticky handle width *//*
+   position: sticky;
+    *//*top: 100px; *//**//* adjust based on navbar height *//*
+    *//*background-color: #f9f9f9;*//*
+    padding:4rem;
+    border-left: 1px solid #ddd;
+    border-radius: 1px;
+    overflow-y: visible;    *//* no inner scrollbar *//*
+*/
+flex: 1;                /* narrower */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;  /* pushes content to the right edge */
+  justify-content: flex-start;
+  padding-right: 4rem;   /* optional spacing */
+  min-width: 400px;
+  max-height: none;
+  overflow-y: visible;
+  background-color: #f9f9f9;
+
+
+
+}
+
+.tp-react-root @media (max-width: 768px) {
+    .checkout-columns {
+        flex-direction: column;
+    }
+
+    .left-column,
+    .right-column {
+       width: 100%;
+        padding: 0;
+        min-width: auto;
+
+
+
+    }
+}
+
+.tp-react-root .cart-item {
+    border-bottom: 1px solid #ddd;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.tp-react-root .cart-summary {
+  font-size: 16px;
+  padding: 12px;
+}
+
+.tp-react-root .summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+   padding: 12px;
+}
+
+.tp-react-root .summary-row.total {
+  font-weight: bold;
+  border-top: 1px solid #ccc;
+  padding-top: 8px;
+}
+
+.tp-react-root button {
+ background: none;
+   border: none;
+   padding: 0;
+   margin: 0;
+   color: black;
+   font-weight:bold;
+   cursor: pointer;
+   text-decoration: none; /* optional for link-like feel */
+
+
+}
+/*.tp-react-root .checkout-container {
+  display: flex;
+
+  gap: 20px;
+  align-items: flex-start; *//* keeps both columns aligned at the top *//*
+}
+.tp-react-root .left-column {
+  flex: 2; *//* give more width compared to right column *//*
+  min-width: 0; *//* prevents overflow pushing right column *//*
+  max-height: 600px;
+  max-height: none;     *//* remove fixed height *//*
+    overflow-y: visible;  *//* no inner scrollbar *//*
+
+
+}
+
+.tp-react-root .right-column {
+  flex: 1; *//* narrower than left column *//*
+  display: flex;
+  flex-direction: column;
+   align-items: flex-end;   *//* pushes content to the right edge *//*
+  justify-content: flex-start;
+padding-right: 140px;      *//* optional spacing from edge *//*
+ max-height: none;     *//* remove fixed height *//*
+   overflow-y: visible;  *//* no inner scrollbar *//*
+
+
+
+
+
+
+   min-width: 500px;
+}*/
+.tp-react-root .eligible-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+.tp-react-root .default-badge {
+  background-color: black;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 6px;
+}
+
+
+/* Container: stack products vertically */
+.tp-react-root .eligible-item {
+  margin-bottom: 12px; /* space between rows */
+}
+/* Parent container: stack items vertically */
+.tp-react-root .rows {
+  display: flex;
+  flex-direction: column; /* ensures vertical stacking */
+}
+
+
+/* Each product row: image + details side by side */
+.tp-react-root .cart-row {
+  display: flex;
+  flex-direction: row;   /* image left, details right */
+  align-items: center;
+}
+
+/* Image styling */
+.tp-react-root .cart-image {
+  width: 80px;   /* adjust size */
+  height: auto;
+  margin-right: 8px; /* small gap so text doesn’t touch image */
+}
+
+/* Details block */
+.tp-react-root .cart-info {
+  display: flex;
+  flex-direction: column; /* stack name, description, qty vertically */
+}
+
+
+.tp-react-root .main-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* centers checkout content */
+  min-height: 100vh;     /* keeps full height */
+  padding-top: 20px;     /* optional spacing when NavBar is hidden */
+}
+
+.tp-react-root .delivery-message {
+  margin-top: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+.tp-react-root .proceed-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.tp-react-root .proceed-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.tp-react-root .shipping-method-box{
+margin-top: 24px;
+padding: 16px;
+border: 2px solid #ccc;
+border-radius: 8px;
+background-color:white;
+}
+.tp-react-root .payment-method-box {
+   margin-top: 30px;
+     padding: 0px; /* instead of 16px or 24px */
+
+
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color:white;
+
+    /* Add layout */
+    display: flex;        /* enable flexbox */
+    gap: 0px;            /* spacing between columns */
+    align-items: flex-start; /* align columns at the top */
+
+ /*display: grid;
+  grid-template-columns: 1fr 2fr; *//* left 1/3, right 2/3 *//*
+  gap: 30px;*/
+
+
+}
+.tp-react-root .payment-options label,
+.upi-app-options label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.tp-react-root .upi-app-options {
+  padding-left: 1rem;
+  border-left: 2px solid #ddd;
+}
+
+
+
+
+
+.tp-react-root .default-address-summary {
+  margin-bottom: 20px;
+  padding: 16px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+}
+
+.tp-react-root .default-address-summary button {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/*.tp-react-root.left-column,
+.tp-react-root.right-column {
+  min-height: 600px; *//* or use 100vh if full screen *//*
+}*/
+
+/*html, body {
+  overflow-y: scroll;
+}*/
+
+.tp-react-root .shoppingcart {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+
+.tp-react-root .shoppingcart-line {
+   border: 0;
+   height: 2px;
+   background-color: #333; /* or any color */
+   margin-top: 0.5rem;
+   margin-bottom: 1rem;
+
+
+}
+
+.tp-react-root .checkout-container {
+  max-width:200%;
+  overflow-x: hidden; /* hides horizontal scrollbar */
+}
+/*.tp-react-root .checkout-container {
+  max-width:200%;
+  overflow-y: hidden; *//* hides horizontal scrollbar *//*
+}*/
+
+/*.tp-react-root .left-column {
+  max-height: 80vh;   *//* or 100vh minus header/footer *//*
+  overflow-y: auto;   *//* scroll only inside cart column *//*
+}*/
+/*.tp-react-root .left-column {
+  overflow-y: visible; *//* default, no inner scrollbar *//*
+}
+.tp-react-root.right-column {
+     *//* let it grow naturally *//*
+  overflow-y: visible;  *//* no inner scrollbar *//*
+}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+position: absolute;
+bottom: 10px;
+right: 10px;
+background-color: rgba(0, 128, 0, 0.8);
+color: white;
+padding: 6px 12px;
+border-radius: 4px;
+font-weight: bold;
+*/
+
+
+
+
+
+/*.tp-react-root .header-container {
+    text-align: center;
+    padding: 2rem;
+    background-color: #001f3f;
+    color: white;
+}
+
+.tp-react-root .header-title {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.tp-react-root .header-subtitle {
+    font-size: 1.2rem;
+    font-style: italic;
+}*/
+
 
 
 

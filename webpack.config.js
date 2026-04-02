@@ -1,6 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const webpack = require('webpack');
+const dotenv = require('dotenv');
+
+const envFile = process.env.NODE_ENV === 'production' ? './.env.production' : './.env.development';
+const env = dotenv.config({ path: envFile }).parsed;
+
 module.exports = {
   entry: './src/main.tsx',
   output: {
@@ -19,6 +25,14 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
       '@img': path.resolve(__dirname, 'src/assets/img'),
+        '@components': path.resolve(__dirname, 'src/components'),
+        '@cart': path.resolve(__dirname, 'src/components/cart'),
+        '@products': path.resolve(__dirname, 'src/components/products'),
+        '@interfaces': path.resolve(__dirname, 'src/interfaces')
+
+
+
+
     },
   },
   module: {
@@ -42,6 +56,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
+
+     new webpack.DefinePlugin({
+          'process.env': JSON.stringify(env)
+        })
   ],
   devServer: {
     static: {
@@ -50,6 +68,8 @@ module.exports = {
     historyApiFallback: true,
     port: 8080,
     open: true,
+    //disableHostCheck: true,
+    allowedHosts: 'all'
   },
   devtool: 'source-map',
   mode: 'development',

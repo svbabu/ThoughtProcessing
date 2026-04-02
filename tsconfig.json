@@ -8,10 +8,12 @@
 
       "@components/*": ["components/*"],
       "@WelcomeSection/*": ["components/WelcomeSection/*"],
+      "@cart/*": ["components/cart/*"],
+      "@products/*": ["components/products/*"],
       "@interfaces/*": ["interfaces/*"]
     },
     "typeRoots": [
-      "./src/types",
+      "./src/typed",
       "./node_modules/@types"
     ],
     "resolveJsonModule": true,
@@ -26,5 +28,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
+  "files": ["src/typed/custom.d.ts"],
   "include": ["src"]
 }

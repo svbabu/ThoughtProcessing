@@ -1,5 +1,10 @@
 // src/components/WelcomeSection/NavBar.tsx
 import React from 'react';
+import { useCart } from '@cart/CartContext';
+import { Link } from 'react-router-dom';
+
+
+
 import '../../react-layout.css';
 
 
@@ -11,6 +16,7 @@ import twofriends1 from '@img/twofriends1.png';
 import housedesign from '@img/housedesign.png';
 import goodlooklady1 from '@img/goodlooklady1.png';
 import beautifulweathersun from '@img/beautifulweathersun.png';
+import home from '@img/home.png';
 
 
 
@@ -18,9 +24,12 @@ import beautifulweathersun from '@img/beautifulweathersun.png';
 
 
 const Navbar: React.FC = () => {
+     const { cart } = useCart();
+     const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   return (
+
     <div className="nav-bar-wrapper">
-      <img src={beautifulweathersun} alt="Family Enjoying Together" className="family-image" />
+      <img src={goodlooklady1} alt="Family Enjoying Together" className="family-image" />
 
 
       <div className="nav-bar">
@@ -33,8 +42,20 @@ const Navbar: React.FC = () => {
         <a href="#Insights" className="nav-link">Insights||</a>
         <a href="#contact" className="nav-link">Contact</a>
 
+     <nav>
+                  {/* other nav links */}
+                  <Link to="/cart" className="cart-link">
+                    🛒 Cart ({itemCount})
+                  </Link>
+                </nav>
       </div>
-      <img src={codeheartlove} alt="Family Enjoying Together" className="codeheartlove-image" />
+      {/* <img src={codeheartlove} alt="Family Enjoying Together" className="codeheartlove-image" /> */}
+
+
+
+
+
+
     </div>
 
 

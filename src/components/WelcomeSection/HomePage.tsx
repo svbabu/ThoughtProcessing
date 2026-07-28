@@ -214,7 +214,7 @@ const handleSignOut = async () =>
                 <div className="home-text">
                   <h2 className="section-title">Welcome to Home</h2>
                   <p>
-                    I'm being 6 years of working experience as a Java developer, web designer,
+                    I'm being x+ years of working experience as a Java developer, web designer,
                     and backend specialist. My focus is clarity, care, and modular architecture.
                   </p>
                   <ul className="list-unstyled">

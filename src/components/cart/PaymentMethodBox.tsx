@@ -3,20 +3,48 @@ import googlepay from '@img/googlepay.png';
 import phonepe from '@img/phonepe.png';
 import paytm from '@img/paytm.png';
 import amazonpay from '@img/amazonpay.png';
+import upiicon from '@img/upiicon.png';
+
 
 import cod from '@img/cod.png';
 import startNetBankingPayment from '@cart/startNetBankingPayment';
 import PaymentButton from '@cart/PaymentButton';
 import openRazorpayCheckout from '@cart/openRazorpayCheckout';
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import {
+  Button,
+  Collapse,
+  List,
+  ListItemButton,
+  Typography,
+  Box,
+} from "@mui/material";
 
 interface PaymentMethodBoxProps {
-  totalAmount: number;
+    razorpayOrderId: string;
+      totalAmount: number;
+      selectedPayment: string;
+      setSelectedPayment: (method: string) => void;
+      selectedBank: string;
+      setSelectedBank: (bank: string) => void;
 }
-const PaymentMethodBox: React.FC<PaymentMethodBoxProps>= ({ totalAmount }) => {
-
+//const PaymentMethodBox: React.FC<PaymentMethodBoxProps>= ({ totalAmount }) => {
+export const PaymentMethodBox: React.FC<PaymentMethodBoxProps> = ({
+  razorpayOrderId,
+  totalAmount,
+  selectedPayment,
+  setSelectedPayment,
+  selectedBank,
+  setSelectedBank
+}) => {
 
    // Payment method state
-  const [selectedPayment, setSelectedPayment] = useState("upi"); // default to UPI
+  //const [selectedPayment, setSelectedPayment] = useState("upi"); // default to UPI
+   // Net banking
+   // const [selectedBank, setSelectedBank] = useState("");
+
   const [selectedUpiApp, setSelectedUpiApp] = useState("");  // no app selected yet
   const [upiId, setUpiId] = useState("");
   const [isVerified, setIsVerified] = useState(false);
@@ -28,8 +56,6 @@ const PaymentMethodBox: React.FC<PaymentMethodBoxProps>= ({ totalAmount }) => {
   const [expiry, setExpiry] = useState("");
   const [cvv, setCvv] = useState("");
 
-  // Net banking
-  const [selectedBank, setSelectedBank] = useState("");
 
 
 {/*    const [fullUpiId, setFullUpiId] = useState(""); */}
@@ -381,7 +407,17 @@ return (
 >
       <h4>Payment Method</h4>
      <div className="payment-options">
-                  <label>
+                  <label
+                   style={{
+                       display: "flex",
+                                              alignItems: "flex-start", // align radio at top
+                                              gap: "8px",
+                                              cursor: "pointer"
+                    }}
+                  >
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                                        {/* First row: radio + icon + title */}
+                                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <input
                       type="radio"
                       name="payment"
@@ -389,10 +425,28 @@ return (
                       checked={selectedPayment === "upi"}
                       onChange={() => setSelectedPayment("upi")}
                     />
-                    UPI (Google Pay, PhonePe,Paytm,Amazon)
+
+                        <img src={upiicon} alt="UPI" width={25} height={30} />
+                         <span>UPI </span>
+                       </Box>
+                        <span style={{ fontSize: "0.85rem", color: "#555" }}>
+                                                   (Google Pay, PhonePe, Paytm, Amazon) – Pay via UPI ID
+                                                 </span>
+                                                 </Box>
+
                   </label>
 
-                  <label>
+                  <label
+                   style={{
+                       display: "flex",
+                         alignItems: "flex-start", // align radio at top
+                         gap: "8px",
+                         cursor: "pointer"
+                    }}
+                  >
+                  <Box sx={{ display: "flex", flexDirection: "column" }}>
+                      {/* First row: radio + icon + title */}
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     <input
                       type="radio"
                       name="payment"
@@ -400,9 +454,26 @@ return (
                       checked={selectedPayment === "card"}
                       onChange={() => setSelectedPayment("card")}
                     />
-                    Credit/Debit Card
+
+                       <CreditCardIcon fontSize="small" />
+                       <span>Credit/Debit Card</span>
+                     </Box>
+                       <span style={{ fontSize: "0.85rem", color: "#555" }}>
+                            Use your Credit or Debit card
+                          </span>
+                           </Box>
                     </label>
-                                           <label>
+                                           <label
+                                            style={{
+                                              display: "flex",
+                                                                      alignItems: "flex-start", // align radio at top
+                                                                      gap: "8px",
+                                                                      cursor: "pointer"
+                                             }}
+                                           >
+                                            <Box sx={{ display: "flex", flexDirection: "column" }}>
+                                                                 {/* First row: radio + icon + title */}
+                                                                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                                              <input
                                                type="radio"
                                                name="payment"
@@ -410,10 +481,27 @@ return (
                                                checked={selectedPayment === "netbanking"}
                                                onChange={() => setSelectedPayment("netbanking")}
                                              />
-                                             Net Banking
+
+                                                  <AccountBalanceIcon fontSize="small" />
+                                                  <span>Net Banking </span>
+                                                </Box>
+                                                 <span style={{ fontSize: "0.85rem", color: "#555" }}>
+                                                                            Pay by your preferred bank
+                                                                          </span>
+                                               </Box>
                                            </label>
 
-                       <label>
+                       <label
+                        style={{
+                           display: "flex",
+                                                   alignItems: "flex-start", // align radio at top
+                                                   gap: "8px",
+                                                   cursor: "pointer"
+                         }}
+                       >
+                       <Box sx={{ display: "flex", flexDirection: "column" }}>
+                                             {/* First row: radio + icon + title */}
+                                             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                          <input
                            type="radio"
                            name="payment"
@@ -421,8 +509,15 @@ return (
                            checked={selectedPayment === "cod"}
                            onChange={() => setSelectedPayment("cod")}
                          />
-                          Cash on Delivery
 
+                               <LocalShippingIcon fontSize="small" />
+                               <span>Cash on Delivery </span>
+                             </Box>
+                              <span style={{ fontSize: "0.85rem", color: "#555" }}>
+                                                                               + ₹30
+                                                                     </span>
+
+                       </Box>
                        </label>
 
                      </div>

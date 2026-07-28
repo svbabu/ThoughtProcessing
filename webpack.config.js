@@ -12,6 +12,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+     publicPath: "/",   // 👈 ensures bundle.js is always served from root
     clean: true,
   },
     stats: {
@@ -27,6 +28,8 @@ module.exports = {
       '@img': path.resolve(__dirname, 'src/assets/img'),
         '@components': path.resolve(__dirname, 'src/components'),
         '@cart': path.resolve(__dirname, 'src/components/cart'),
+        "@layout": path.resolve(__dirname, "src/components/layout"),
+        "@WelcomeSection": path.resolve(__dirname, "src/components/WelcomeSection"),
         '@products': path.resolve(__dirname, 'src/components/products'),
         '@interfaces': path.resolve(__dirname, 'src/interfaces')
 

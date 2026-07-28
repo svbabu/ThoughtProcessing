@@ -8,6 +8,12 @@ import {ShippingAddress} from '@cart/ShippingAddress';
 import { db } from '../../firebase';
 import { doc, setDoc,collection, query, where, getDocs } from 'firebase/firestore';
 import { AddressFormType } from '../../typed/AddressFormType';
+import { Product } from "../../typed/Product";
+import { OrderRequestDTO } from '../../typed/Product';
+import { OrderResponseDTO } from '../../typed/Product';
+import { ShippingAddressDto } from '../../typed/ShippingAddressDto';
+import { mapProductToOrderItem } from '../../typed/Product';
+import { checkoutOrder } from "@cart/CheckoutService";
 import {DefaultAddressCard} from '@cart/DefaultAddressCard'; // adjust path as needed
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber, UserCredential } from 'firebase/auth';
 import { auth } from '../../firebase'; // ✅ already initialized
@@ -21,8 +27,9 @@ import { format } from "date-fns";
 import latop from "@img/latop.png";
 import {CartSummary} from '@cart/CartSummary';
 import PaymentMethodBox from '@cart/PaymentMethodBox';
-import { useAuth } from "@cart/AuthProvider";
 
+import { useAuth } from "@cart/AuthProvider";
+import { useLocation } from "react-router-dom";
 function useCartContext() {
 
 }
@@ -30,7 +37,16 @@ function useCartContext() {
  const Checkout: React.FC = () => {
      /* const { isUserLoggedIn } = useAuth(); */
      /* if not working new line without is isUserLoggedIn so enable old code */
+     const [razorpayOrderId, setRazorpayOrderId] = useState<string>("");
+     const [orderResponse, setOrderResponse] = useState<OrderResponseDTO | null>(null);
+     const [orderId, setOrderId] = useState<string | null>(null);
+       const [showPaymentSection, setShowPaymentSection] = useState(false);
+       const [selectedPayment, setSelectedPayment] = useState<string>("upi");
+       const [selectedBank, setSelectedBank] = useState<string>("");
+       const [totalAmount, setTotalAmount] = useState<number>(0);
+
     const { showAuthModal, setShowAuthModal, isUserLoggedIn } = useCheckout();
+
    /* const { showAuthModal, setShowAuthModal} = useCheckout(); */
     /* const [selectedShippingType, setSelectedShippingType] = useState<'home' | 'pickup' | null>(null); */
     const [selectedShippingType, setSelectedShippingType] = useState<'home' | 'pickup'>('home');
@@ -39,7 +55,7 @@ function useCartContext() {
     const [selectedDate, setSelectedDate] = useState<string | null>(null);
     const [deliveryDates, setDeliveryDates] = useState<string[]>(["21/11/2025", "22/11/2025"]);
    /*  const [eligibleProducts, setEligibleProducts] = useState<Product[]>([]); */
-  const [selectedPayment, setSelectedPayment] = useState("");
+  //const [selectedPayment, setSelectedPayment] = useState("");
    const [selectedUpiApp, setSelectedUpiApp] = useState("");
    const [upiId, setUpiId] = useState("");
    const [isVerified, setIsVerified] = useState(false);
@@ -47,8 +63,9 @@ function useCartContext() {
 const [showEligible, setShowEligible] = useState(false);
 const [showorderEligible, setShoworderEligible] = useState(false);
 const [showPaymentMethod, setShowPaymentMethod] = useState(false);
-const [showPaymentSection, setShowPaymentSection] = useState(false);
+//const [showPaymentSection, setShowPaymentSection] = useState(false);
 const [showEditAddress, setShowEditAddress] = useState(false);
+
 const { cart, dispatch} = useCart();
 const [form, setForm] = useState<AddressFormType>({
         userId: '',
@@ -73,6 +90,23 @@ const [form, setForm] = useState<AddressFormType>({
         verifyOtp,
         changeNumber
     } = useOtpAuth();
+{showAuthModal && (
+  <AuthModal
+    visible={showAuthModal}
+    onClose={() => setShowAuthModal(false)}
+    mobile={mobile}
+    setMobile={setMobile}
+    otp={otp}
+    setOtp={setOtp}
+    isOtpSent={isOtpSent}
+    cooldownTime={cooldownTime}
+    sendOtp={sendOtp}
+    verifyOtp={verifyOtp}
+    changeNumber={changeNumber}
+  />
+)}
+/* const { isOtpVerified } = useOtpAuth(); */
+const verified = isOtpVerified || localStorage.getItem("isOtpVerified") === "true";
 const [isEditing, setIsEditing] = useState(false);
 const [showForm, setShowForm] = useState(false);
 /* const [isOtpVerified, setIsOtpVerified] = useState( localStorage.getItem("isOtpVerified") === "true" ); */
@@ -89,21 +123,48 @@ const isOtpVerified = location.state?.isOtpVerified || false; */
             const q = query(
                 collection(db, 'addresses'),
                 where('userId', '==', userId),
-                where('isDefault', '==', true)
+                where('useDefault', '==', true)
+                //where('isDefault', '==', true)
             );
             const snapshot = await getDocs(q);
             if (!snapshot.empty) {
-                console.log("Default address from Firestore:", snapshot.docs[0].data());
+               //const data = snapshot.docs[0].data() as AddressFormType;
+               const docData = snapshot.docs[0].data();
+               console.log("Firestore raw doc:", docData);
+              /*  const data: AddressWithId = {
+                   ...docData,
+                   id: docData.id,              // ✅ backend PK if stored
+                   firestoreId: docSnap.id,     // ✅ Firestore doc ID
+                 }; */
+               const data: AddressFormType = {
+                 userId: docData.userId ?? "",
+                  fullName: docData.fullName ?? "",
+                  addressType: docData.addressType ?? "Home",
+                  buildingName: docData.buildingName ?? "",
+                  streetName: docData.streetName ?? "",
+                  city: docData.city ?? "",
+                  state: docData.state ?? "",
+                  pincode: docData.pincode ?? "",
+                  mobileNumber: docData.mobileNumber ?? "",
+                  landmark: docData.landmark ?? "",
+                  country: docData.country ?? "India"
+               };
+                      console.log("Default address from Firestore:", data);
+                      setDefaultAddress(data);
+                      setForm(data); // ✅ copy into form so fullName is set
+                      return;
+               /*  console.log("Default address from Firestore:", snapshot.docs[0].data());
                 setDefaultAddress(snapshot.docs[0].data());
                 return;
-            }
+            } */
             // 🔁 Fallback to backend
             const res = await axios.get(`http://localhost:8081/api/shipping/default/${userId}`);
             if (res.data) {
                 setDefaultAddress(res.data);
+                 setForm(res.data); // ✅ copy into form so fullName is set
                 toast.success('Default address loaded successfully');
             }
-        } catch (error) {
+        } }catch (error) {
             console.error('Error fetching default address:', error);
             toast.error('Failed to load default address');
 
@@ -119,10 +180,13 @@ const updateDefaultAddress = async (addressData: any) => {
     }
 
     //await setDoc(doc(db, "addresses", uid), {
-        await setDoc(doc(db, "addresses", addressData.id), {
+        //doc(db, "addresses", addressData.firestoreId) call it below any issue is happen
+        //await setDoc(doc(db, "addresses", addressData.id), {
+            await setDoc(doc(db, "addresses", addressData.firestoreId), {
       ...addressData,
       userId: uid,
-      isDefault: true
+      useDefault: true,
+     // isDefault: true
     }, { merge: true });
 
     setDefaultAddress(addressData);
@@ -133,7 +197,11 @@ const updateDefaultAddress = async (addressData: any) => {
   }
 };
 
-
+//new upda 20/07/26te
+/* const location = useLocation();
+const [isOtpVerified, setIsOtpVerified] = useState(
+  location.state?.isOtpVerified || localStorage.getItem("isOtpVerified") === "true"
+); */
 
     useEffect(() => {
        /* const id = 1; // temporary hardcoded ID for testing*/
@@ -192,8 +260,8 @@ console.log("Cart before filtering:", cart);
     });
 
 const defaultDates = [
-  "05/04/2026", "06/04/2026", "22/04/2026",
-  "23/04/2026", "24/04/2026", "25/04/2026"
+  "01/07/2026", "06/07/2026", "22/07/2026",
+  "23/07/2026", "24/07/2026", "25/07/2026"
 ];
    const updatedCart = cart.map(item => ({
   ...item,
@@ -219,13 +287,25 @@ const defaultDates = [
     };
 
 const allowedDates = ["21/11/2025", "22/11/2025"];
-const eligibleProducts = selectedDate
+ /* const eligibleProducts: Product[] = selectedDate
+  ? updatedCart.filter(item =>
+      item.deliveryDates?.some(date => normalize(date) === normalize(selectedDate))
+    ) as Product[]
+  : updatedCart as Product[]; */  //new code
+
+ /* const eligibleProducts = selectedDate
         ? updatedCart.filter(item =>
             item.deliveryDates?.some(date =>
                 normalize(date) === normalize(selectedDate)
             )
         )
-        : updatedCart;
+        : updatedCart; */
+
+ const eligibleProducts: Product[] = selectedDate
+  ? updatedCart.filter((item: Product) =>
+      item.deliveryDates?.some((date: string) => normalize(date) === normalize(selectedDate))
+    )
+  : updatedCart;
 
     console.log("Eligible Products Final:", eligibleProducts);
     console.log("Selected Date new:", selectedDate);
@@ -283,14 +363,14 @@ const handleRemove = (id: string, price: number) => {
  return (
             <CartItem
                 {...item}
-                deliveryDates={filteredDates}
+                deliveryDates={filteredDates?? []}
                 selectedDate={selectedDate}
                 /* isAvailableOnSelectedDate={
                     selectedDate ? item.deliveryDates?.includes(selectedDate) : false
                 } */
                isAvailableOnSelectedDate={!!selectedDate}   // ✅ true for all products if a date is chosen
 
-                onRemove={() => handleRemove(item.id, item.quantity)}
+                onRemove={() => handleRemove(item.id, item.quantity??1)}
             />
 
         );
@@ -325,7 +405,62 @@ sessionStorage.removeItem("checkoutState");
             else { setShowAuthModal(true); // ✅ open OTP modal if not
                 }
             };
+       const handleAddressSaved = (address: ShippingAddressDto) => {
+         setForm(address); // ✅ update checkout state with saved address
+       };
 
+
+const handlePlaceOrder = async () => {
+    // ✅ Guard OTP
+     /*  if (!isOtpVerified) {
+        toast.error("Please verify OTP before placing order");
+        return;
+      } */
+  // ✅ Step 1: calculate totals
+  const itemAmount = eligibleProducts.reduce(
+    (sum: number, item) => sum + item.appliedPrice * (item.quantity ?? 1),
+    0
+  );
+  const totalAmount = itemAmount + 249 + 10;
+
+  // ✅ Step 2: build request (omit orderId)
+ const orderRequest: Omit<OrderRequestDTO, "orderId"> = {
+      //const orderRequest:OrderRequestDTO = {
+    //orderId: crypto.randomUUID(), // ✅ frontend generates for now
+    customerId: getAuth().currentUser?.uid ?? "guest",
+    totalAmount,
+    items: eligibleProducts.map(mapProductToOrderItem),
+    shippingAddress: form,
+    payment: {
+      amount: totalAmount,
+      status: "created",
+      method: selectedPayment,
+    },
+  };
+
+  try {
+    // ✅ Step 3: call backend
+    const response = await checkoutOrder(orderRequest);
+
+    // ✅ Step 4: capture backend response
+    setOrderResponse(response);                  // full OrderResponseDTO
+    setRazorpayOrderId(response.razorpayOrderId); // Razorpay ID for popup
+    setOrderId(response.orderId);                // backend orderId for UI/success page
+
+    // ✅ Step 5: reveal payment UI
+    setShowPaymentSection(true);
+  } catch (err) {
+    console.error("Checkout failed:", err);
+    alert("Something went wrong while creating order.");
+  }
+};
+const isProceedDisabled =!form.fullName || !selectedDate;
+    console.log({
+      isOtpVerified,
+      fullName: form.fullName,
+      selectedDate,
+      isProceedDisabled
+    });
 
     return (
         <div className="checkout-container">
@@ -408,9 +543,15 @@ sessionStorage.removeItem("checkoutState");
     </div> {/* PaymentMethodBox div */}
     </div>
     <PaymentMethodBox
-      totalAmount={
+    razorpayOrderId={razorpayOrderId}
+     totalAmount={cart.reduce((sum, item) => sum + item.appliedPrice * item.quantity, 0) + 249 + 10}
+     selectedPayment={selectedPayment}
+     setSelectedPayment={setSelectedPayment}
+     selectedBank={selectedBank}
+     setSelectedBank={setSelectedBank}
+      /* totalAmount={
         cart.reduce((sum, item) => sum + item.appliedPrice * item.quantity, 0) + 249 + 10
-      }
+      } */
     />
       {/* <PaymentMethodBox totalAmount={totalPrice}/> ✅ Payment section isolated */}
 
@@ -507,7 +648,7 @@ sessionStorage.removeItem("checkoutState");
                                                      <div className="cart-row">
                                                        <img src={item.imageSrc} alt={item.productName} className="cart-image" />
                                                        <div className="cart-info">
-                                                         <div className="mb-0">Name: {item.name}</div>
+                                                         <div className="mb-0">Name: {item.modelName}</div>
                                                          <div className="mb-0">Des: {item.description}</div>
                                                          <div className="mb-0">Qty: {item.quantity}</div>
                                                        </div>
@@ -520,6 +661,7 @@ sessionStorage.removeItem("checkoutState");
 {/* Address form */}
  {/* Products summary */}
          {/* Delivery date picker */}
+
  <label>Select Delivery Date:</label>
                                  <select onChange={(e) => setSelectedDate(e.target.value)}>
                                      {defaultDates.map((date, index) => (
@@ -548,10 +690,14 @@ sessionStorage.removeItem("checkoutState");
            </div>
 
          )}
+
          <button
+
            className="proceed-button"
-           onClick={() => setShowPaymentSection(true)}
-           disabled={!selectedDate} // ✅ disable until a date is chosen
+           onClick={handlePlaceOrder}   // 🔑 call backend order creation first
+            disabled={isProceedDisabled}
+           //onClick={() => setShowPaymentSection(true)}
+           //disabled={!selectedDate} // ✅ disable until a date is chosen
          >
            Proceed to Payment
          </button>
@@ -583,10 +729,10 @@ sessionStorage.removeItem("checkoutState");
                                {/* If you want to show image, uncomment below */}
                                <img src={item.imageSrc} alt={item.productName} className="cart-image" />
                                <div className="cart-info">
-                                 <div className="mb-0">Name: {item.name}</div>
+                                 <div className="mb-0">Name: {item.modelName}</div>
                                  <div className="mb-0">Des: {item.description}</div>
                                  <div className="mb-0">Qty: {item.quantity}</div>
-                                 <div className="mb-0">₹{item.appliedPrice*item.quantity}</div>
+                                 <div className="mb-0">₹{item.appliedPrice*(item.quantity ?? 1)}</div>
                                 <div className="mb-0">
                                   {item.selectedDate ? (
                                       item.isAvailableOnSelectedDate ? (

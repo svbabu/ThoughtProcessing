@@ -5,9 +5,18 @@ import { auth,db } from "../../firebase";
 import { useAuth } from "./AuthProvider"; // centralized auth context
 import axios from 'axios';
 import { useCart } from '@cart/CartContext';
+
 import { Link } from 'react-router-dom';
 import '../../react-layout.css';
-
+import {
+  Box,
+  Typography,
+  Divider,
+  Button,
+  Slider,
+  Checkbox,
+  FormControlLabel,
+} from "@mui/material";
 /* import { db } from "../../firebase"; */ // path to your firebase.ts
 import { collection,setDoc, addDoc,doc,getDoc,initializeFirestore,getFirestore,enableIndexedDbPersistence } from "firebase/firestore";
 import {
@@ -19,6 +28,7 @@ import {
 import { AddressFormType } from '../../typed/AddressFormType';
 import AddressBook from "./AddressBook";
 import ProfilePage from "./ProfilePage";
+//import Favourites from "./Favourites";
 import profileicon from "@img/profileicon.png";
 import addressbookicon from "@img/addressbookicon.png";
 import ordericon from "@img/ordericon.png";
@@ -31,16 +41,64 @@ import reviewicon from "@img/reviewicon.png";
 import landmarkicon from "@img/landmarkicon.png";
 import { FaUser, FaHeart, FaShoppingCart } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
-
+import { Dropdown } from "react-bootstrap";
+import Favourites from "./Favourites";
+import { ProductList } from "../WelcomeSection/ProductList"
+import { LaptopPage } from "../WelcomeSection/LaptopPage"
+import { featuredProducts } from '../../typed/Product';
+import {Product,FavouriteProduct } from '../../typed/Product';// adjust path
+import { CartItem } from '@cart/CartContext';
+import latop from '@img/latop.png';
+import { useFavourites } from "@cart/FavouritesContext";
+import { useLocation } from "react-router-dom";
 //landmarkicon
 //const [activeSection, setActiveSection] = useState<string | null>(null);
+/* type ProductListProps = {
+    products: Product[];
+    category?: string;
+    onAddToCart?: (product: Product) => void;
+    onViewMore?: (product: Product) => void; // ✅ new prop
+    isFavourite?: boolean;                // ✅ new prop
+   // onToggleFavourite?: (id: string) => void; // ✅ new prop
+      //favourites: FavouriteProduct[];                  // ✅ add this
+     onToggleFavourite?: (product: Product) => void;  // ✅ handler
 
+}; */
+/*
+export type CartItem = {
+    quantity: number;
+      onRemove?: (id: string) => void; // optional callback
+      addedAt?: Date;
+     */
+/* id: string;
+    name: string;
+    modelName:String;
+    originalPrice: number;
+    price: number;
+    imageUrl: string;
+    imageSrc: string; // ✅ Add this line
+    quantity: number;
+    deliveryDates?: string[]; // ✅ Add this line
+    selectedDate?: string | null *//*
+
+};
+ */
 
 const AccountsPage: React.FC = () => {
      const { cart } = useCart();
-          const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
- const [visible, setVisible] = useState(false); // ✅ define state
- const navigate = useNavigate(); // ✅ define navigate
+    // const [favourites, setFavourites] = useState<string[]>([]);
+    /*  const [products] = useState<Product[]>([
+        { id: "1", productName: "Laptop A", image: "a.jpg", originalPrice: 1000, appliedPrice: 800, basePrice: 1000, discountPercentage: 20, saved: 200 },
+        { id: "2", productName: "Laptop B", image: "b.jpg", originalPrice: 1200, appliedPrice: 950, basePrice: 1200, discountPercentage: 21, saved: 250 },
+      ]); */
+   const { dispatch } = useCart();   // ✅ now dispatch is available
+    const [products, setProducts] = useState<Product[]>([]);   // ✅ declare products
+    //const [favourites, setFavourites] = useState<FavouriteProduct[]>([]);
+    //const { favourites, removeFavourite, addToCart } = useFavourites();
+   //const [favourites, setFavourites] = useState<Product[]>([]);
+     const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+     const [visible, setVisible] = useState(false); // ✅ define state
+     const navigate = useNavigate(); // ✅ define navigate
 
     /* const db = initializeFirestore(app, { enableIndexedDbPersistence: true }); */
     const user = auth.currentUser;
@@ -56,7 +114,7 @@ const AccountsPage: React.FC = () => {
           });
       //const { defaultAddress, fetchDefaultAddress, updateDefaultAddress } = useAddressBook();
         //const [activeSection, setActiveSection] = useState("profile");
-        const [activeSection, setActiveSection] = useState<string | null>(null);
+
   useEffect(() => {
               const user = auth.currentUser;
               if (user) { setProfile({
@@ -131,7 +189,8 @@ const AccountsPage: React.FC = () => {
 
 useEffect(() => {
   const user = auth.currentUser;
-  if (user) {
+   if (!user) return;
+  //if (user) {
     // First set basic auth fields
     const baseProfile = {
       firstName: user.displayName?.split(" ")[0] || "",
@@ -161,11 +220,14 @@ useEffect(() => {
     };
 
     fetchProfile();
-  }
+  //}
 }, []);
 
 
-    const { isUserLoggedIn, userId } = useAuth();
+    const { isUserLoggedIn, userId,loading } = useAuth();
+if (loading) {
+  return <p>Loading...</p>; // wait until auth state is ready
+}
 
     if (!isUserLoggedIn) {
          return (
@@ -178,6 +240,7 @@ useEffect(() => {
         }
     const handleSignOut = async () => {
         await auth.signOut(); // 🔹 Firebase clears the session
+        navigate("/home");
        /*  window.recaptchaVerifier = undefined;  */ // 🔹 remove old reCAPTCHA instance
         };
 
@@ -186,6 +249,170 @@ useEffect(() => {
           fetchDefaultAddress();
         }
       }, [activeSection]); */
+function MoreMenu({ handleSignOut }: { handleSignOut: () => void }) {
+  return (
+    <Dropdown>
+      <Dropdown.Toggle
+        as="a"
+        className="nav-link d-flex align-items-center mx-2"
+      >
+        <BsThreeDotsVertical />
+
+      </Dropdown.Toggle>
+      <span className="ms-1">More</span>
+      <Dropdown.Menu>
+        <Dropdown.Item href="#settings">Settings</Dropdown.Item>
+        <Dropdown.Item href="#profile">Profile</Dropdown.Item>
+
+        {/* Sign Out now calls your function */}
+        <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+}
+ // Remove a product from favourites
+  /* const handleRemoveFavourite = (id: string) => {
+    setFavourites(prev => prev.filter(p => p.id !== id));
+  }; */
+
+  // Add a product to cart (replace with your cart logic)
+  /* const handleAddToCart = (id: string) => {
+    const product = favourites.find(p => p.id === id);
+    if (product) {
+      // dispatch to cart context or call your cart function
+      console.log("Adding to cart:", product);
+    }
+}; */
+/* const toggleFavourite = (product: FavouriteProduct) => {
+  setFavourites(prev =>
+    prev.some(f => f.id === product.id)
+      ? prev.filter(f => f.id !== product.id)
+      : [...prev, product]
+  );
+}; */
+ /* const toggleFavourite = (product: Product) => {
+     console.log("ToggleFavourite called for:", product.id);
+  const fav: FavouriteProduct = {
+     // console.log("Toggling favourite:", product.id);
+
+   id: String(product.id), // normalize
+    image: product.image,
+    productName: product.productName,
+    description: product.description,
+    originalPrice: product.originalPrice,
+    appliedPrice: product.appliedPrice,
+  };
+
+   setFavourites(prev => {
+      const exists = prev.some(f => f.id === fav.id);
+      console.log("ToggleFavourite called for:", fav.id, "exists?", exists);
+
+      const newFavs = exists
+        ? prev.filter(f => f.id !== fav.id)
+        : [...prev, fav];
+      console.log("New favourites:", newFavs.map(f => f.id));
+      return newFavs;
+    });
+     *//* prev.some(f => f.id === fav.id)
+      ? prev.filter(f => f.id !== fav.id)
+      : [...prev, fav] *//*
+
+}; */
+/* const toggleFavourite = (id: string) => {
+  const product = products.find(p => p.id === id);
+  if (!product) return;
+  const fav: FavouriteProduct = { … };
+  setFavourites(prev =>
+    prev.some(f => f.id === fav.id)
+      ? prev.filter(f => f.id !== fav.id)
+      : [...prev, fav]
+  );
+}; */
+//toggleFavourite updates the favourites array consistently
+/* const toggleFavourite = (product: Product) => {
+     console.log("toggleFavourite called for account page:", product.id);
+  setFavourites(prev =>
+    prev.some(f => String(f.id) === String(product.id))
+      ? prev.filter(f => String(f.id) !== String(product.id))
+      : [...prev, product]
+  );
+  console.log("AccountsPage toggleFavourite called for:", product.id);
+}; */
+// ✅ For ProductList
+/* const handleAddToCart = (product: Product) => {
+  console.log("Add to cart:", product);
+}; */
+const handleAddToCart = (product: Product | FavouriteProduct) => {
+  dispatch({
+    type: "ADD_ITEM",
+    payload: {
+      id: product.id,
+      name: product.productName,
+      description: product.description,
+      originalPrice: product.originalPrice,
+      basePrice: product.basePrice ?? product.originalPrice,
+      appliedPrice: product.appliedPrice ?? product.originalPrice,
+      price: product.appliedPrice ?? product.originalPrice,
+      discountPercentage: product.discountPercentage ?? null,
+      saved: product.saved??0,
+      imageSrc: product.imageSrc || latop,
+      quantity: 1,
+      deliveryDates: product.deliveryDates ?? [],
+      selectedDate: product.selectedDate ?? null,
+      image: "",
+      productName: "",
+      imageUrl: product.image || latop,
+      date: new Date().toISOString(), // ✅ required by CartItem
+    },
+  });
+};
+
+
+
+const handleViewMore = (product: Product) => {
+  console.log("View more:", product);
+};
+// ✅ For Favourites
+const handleRemoveFavourite = (id: string) => {
+  //setFavourites(prev => prev.filter(f => f.id !== id));
+};
+
+const handleAddFavouriteToCart = (product: FavouriteProduct) => {
+  console.log("Add favourite to cart:", product);
+};
+
+const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const sectionFromQuery = queryParams.get("section"); // ✅ read ?section=favourites
+  //const [activeSection, setActiveSection] = useState<string | null>(null);
+  //const [activeSection, setActiveSection] = useState(sectionFromQuery ?? "profile");
+  // Load from localStorage if no query
+  const [activeSection, setActiveSection] = useState(
+    sectionFromQuery ?? localStorage.getItem("lastSection") ?? "profile"
+  );
+
+  // Update activeSection whenever query changes
+  useEffect(() => {
+    if (sectionFromQuery) {
+      setActiveSection(sectionFromQuery);
+    }
+  }, [sectionFromQuery]);
+// Whenever activeSection changes, save it
+useEffect(() => {
+  if (activeSection) {
+    localStorage.setItem("lastSection", activeSection);
+  }
+}, [activeSection]);
+
+useEffect(() => {
+  if (sectionFromQuery) {
+    setActiveSection(sectionFromQuery);
+  }
+}, [sectionFromQuery]);
+
+  const { favourites, removeFavourite, addToCart } = useFavourites();
+
+
     return (
          <div>
         <div className="accounts-page">
@@ -212,12 +439,42 @@ useEffect(() => {
 
       {/* Right: Account actions */}
        <div className="d-flex align-items-center">
-         <a className="nav-link d-flex align-items-center mx-2">
-           <FaUser style={{ marginRight: "6px" }} /> Account
-         </a>
-         <a className="nav-link d-flex align-items-center mx-2">
+        <Dropdown>
+          <Dropdown.Toggle
+            as="a"
+            className="nav-link d-flex align-items-center mx-2"
+          >
+            <FaUser style={{ marginRight: "6px" }} /> Account
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={() => setActiveSection("profile")}>Profile</Dropdown.Item>
+            <Dropdown.Item href="#orders">Order History</Dropdown.Item>
+              <Dropdown.Item onClick={() => setActiveSection("address")}>Address Book</Dropdown.Item>
+
+            <Dropdown.Item  onClick={() => setActiveSection("payment")}>Payment</Dropdown.Item>
+             <Dropdown.Item onClick={() => setActiveSection("mycredit")}>My Credit</Dropdown.Item>
+              <Dropdown.Item onClick={() => setActiveSection("favourites")}>Favourites</Dropdown.Item>
+               <Dropdown.Item onClick={() => setActiveSection("communications")}>Communications</Dropdown.Item>
+                <Dropdown.Item onClick={() => setActiveSection("reviews")}>Reviews</Dropdown.Item>
+                <Dropdown.Item onClick={() => setActiveSection("landmarkrewards")}>Landmark Rewards</Dropdown.Item>
+                <Dropdown.Item onClick={() => setActiveSection("appsettings")}>App Settings</Dropdown.Item>
+                <Dropdown.Item onClick={() => setActiveSection("help")}>Help</Dropdown.Item>
+
+                {/* Sign Out button inside dropdown */}
+                <Dropdown.Item as="button" onClick={handleSignOut}>
+                  Sign Out
+                </Dropdown.Item>
+            </Dropdown.Menu></Dropdown>
+         {/* <a className="nav-link d-flex align-items-center mx-2">
            <FaHeart style={{ marginRight: "6px" }} /> Favourites
-         </a>
+         </a> */}
+         <Link
+            to="/account?section=favourites"
+           className="nav-link d-flex align-items-center mx-2"
+         >
+           <FaHeart style={{ marginRight: "6px" }} /> Favourites
+         </Link>
 
           <Link to="/cart" className="nav-link d-flex align-items-center mx-2">
               <FaShoppingCart style={{ marginRight: "6px" }} /> Cart ({itemCount})
@@ -225,10 +482,28 @@ useEffect(() => {
         {/*  <a className="nav-link d-flex align-items-center mx-2">
            <FaShoppingCart style={{ marginRight: "6px" }} /> Cart (0)
          </a> */}
-         <a className="nav-link d-flex align-items-center mx-2">
-           <BsThreeDotsVertical />
-         </a>
-       </div>
+       {/* ✅ Replace plain <a> with Dropdown */}
+          <Dropdown>
+              <Dropdown.Toggle
+                  as="a"
+                  className="nav-link d-flex align-items-center mx-2"
+                >
+                  <BsThreeDotsVertical />
+                   {/* Label under/next to the dots */}
+                </Dropdown.Toggle>
+
+               <Dropdown.Menu>
+                 <Dropdown.Item href="#settings">Settings</Dropdown.Item>
+                  <Dropdown.Item onClick={() => setActiveSection("profile")}>
+                     Profile
+                   </Dropdown.Item>
+                 <Dropdown.Item as="button" className="nav-link btn btn-link" onClick={handleSignOut}>
+                     Sign Out
+                   </Dropdown.Item>
+               </Dropdown.Menu>
+             </Dropdown>
+             <span className="ms-1">More</span>
+             </div>
 </div>
 <div className="account-page container mt-4">
     {/* Account-level navigation */}
@@ -250,14 +525,7 @@ useEffect(() => {
       <a className="nav-link">Account Management</a> */}
 
     </nav>
-  {/*  <nav className="nav nav-tabs">
-      <a className={`nav-link ${activeTab === "sale" ? "active" : ""}`} onClick={() => setActiveTab("sale")}>
-        Sale
-      </a>
-      <a className={`nav-link ${activeTab === "living" ? "active" : ""}`} onClick={() => setActiveTab("living")}>
-        Living Room
-      </a>
-    </nav> */}
+
     </div>
         <h2>My Account</h2>
        {/*  <p>Manage your personal details</p> */}
@@ -324,7 +592,7 @@ useEffect(() => {
         />
 
         <div>
-        <span>  Address Book</span>
+        <span>Address Book</span>
         <p className="mb-0" style={{ fontSize: "12px", color: "#666" }}>
                   Manage your shipping and billing addresses
                 </p>
@@ -369,7 +637,7 @@ useEffect(() => {
                   style={{ cursor: "pointer", display: "flex", alignItems: "center" }}>
                   <img
                                 src={favoriteicon}
-                                alt="Profile Icon"
+                                alt="favorite Icon"
                                 style={{ width: "24px", height: "24px", marginRight: "8px" }}
                               />
   <div>
@@ -393,15 +661,7 @@ useEffect(() => {
                        Manage your newsletters and email preferences
                      </p>
   </div></a>
-  {/*  <a className={`nav-link ${activeSection === "communications" ? "active" : ""}`}
-                      onClick={() => setActiveSection("communications")}
-                      style={{ cursor: "pointer", display: "flex", alignItems: "center" }}>
-                      <img
-                                    src={communicationicon}
-                                    alt="Profile Icon"
-                                    style={{ width: "24px", height: "24px", marginRight: "8px" }}
-                                  />
-                                  </a> */}
+
 
 <a className={`nav-link ${activeSection === "reviews" ? "active" : ""}`}
                       onClick={() => setActiveSection("reviews")}
@@ -452,40 +712,74 @@ useEffect(() => {
                              How can we help?
                             </p>
   </a>
-  {/* <a className="nav-link">
- <div><span> Contact Us</span>
- </div>
-<p className="mb-0" style={{ fontSize: "12px", color: "#666" }}>
-Need some help? please contact us!</p>
-  </a>
-  <a className="nav-link">
-  <div><span>Store Locator</span></div>
-  <p className="mb-0" style={{ fontSize: "12px", color: "#666" }}>
-  Find our location?</p>
-  </a>
-  <a className="nav-link">
-  About
-  <p className="mb-0" style={{ fontSize: "12px", color: "#666" }}>
-    More about us?</p>
-  </a>
-   <a className="nav-link">
-  More
-  </a>
-  <a className="nav-link">
-  Gift Card
-  </a>
-  <a className="nav-link">
-  Offers
-  </a> */}
+
   <button className="nav-link btn btn-link" onClick={handleSignOut}>
     Sign Out
   </button>
 </nav>
+  <Divider sx={{  my: 2,
+                           borderStyle: "solid",
+                           borderColor: "#1976d2",        // ✅ red line
+                           borderBottomWidth: 3
+                             }} />
 
 <div className="account-content mt-4">
   {activeSection === "profile" && <ProfilePage />}
  {/*  {activeSection === "orders" && <OrderHistory />} */}
   {activeSection === "address" && <AddressBook />}
+
+    {/* <ProductList
+     products={products}
+     favourites={favourites}
+     onToggleFavourite={toggleFavourite}
+     onAddToCart={handleAddToCart}
+     onViewMore={handleViewMore}
+   /> */}
+   {/*<LaptopPage
+     favourites={favourites}
+     onToggleFavourite={toggleFavourite}
+     onAddToCart={handleAddToCart}
+   /> */}
+    {/* ✅ LaptopPage manages favourites + handlers */}
+    {/* <LaptopPage
+      //favourites={favourites}
+      onToggleFavourite={(product: Product | FavouriteProduct) => {
+        setFavourites(prev =>
+          prev.some(f => f.id === product.id)
+            ? prev.filter(f => f.id !== product.id)
+            : [...prev, product]
+        );
+      }}
+
+      onAddToCart={handleAddToCart}
+    />*/}
+   {activeSection === "favourites" && (
+     <Favourites
+               //favourites={favourites}
+               favourites={favourites as FavouriteProduct[]}   // ✅ matches
+               onRemove={removeFavourite}
+               onAddToCart={addToCart}
+
+     />
+   )}
+    {/*{activeSection ==="favourites" && (
+       <Favourites
+       favourites={favourites}   // ✅ just pass the array directly
+        onRemove={(id) => setFavourites(prev => prev.filter(p => p.id !== id))}
+         onAddToCart={(id) => {
+            const fav = favourites.find(p => p.id === id);
+            if (fav) handleAddFavouriteToCart(fav);  // ✅ correct type
+          }}
+
+        //onAddToCart={handleAddToCart}
+           *//* favourites={products.filter(p => favourites.includes(p.id))}
+          onRemove={(id) => setFavourites(prev => prev.filter(fid => fid !== id))}
+          onAddToCart={handleAddToCart} *//*
+         *//* favourites={favourites}
+        onRemove={handleRemoveFavourite}
+        onAddToCart={handleAddToCart} *//*
+      />
+    )}*/}
 </div>
 
 </div>

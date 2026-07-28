@@ -17,7 +17,7 @@ const About: React.FC = () => {
            <div className="about-text">
              <h2 className="section-title">About Me</h2>
              <p>
-              I'm being 6 years of working experiance as a Java developer, web designer, and backend specialist. My focus is clarity, care, and modular architecture.
+              I'm being x+  years of working experiance as a Java developer, web designer, and backend specialist. My focus is clarity, care, and modular architecture.
              </p>
              <ul className="list-unstyled">
                <li><i className="far fa-check-circle text-primary me-2"></i>Affordable Prices</li>

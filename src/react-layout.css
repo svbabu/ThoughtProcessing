@@ -144,8 +144,8 @@ text-align: center;
       padding-bottom: 0;
     box-sizing: border-box;  /* includes padding in width calculation */
    /* background-color: rgba(255, 190, 51, 0.99);*/
-   background-color: purple;
-    color: white;
+   background-color:purple;
+    color:white;
     font-size: 1.5rem;
     font-weight: 300;
     font-family: 'Great Vibes', Dubai;
@@ -196,11 +196,6 @@ body,
 }
 .tp-react-root .destiny-column {
   flex: 1 1 70%;
-
-
-
-
-
   min-width: 300px;
   margin: 0;
   padding: 0;
@@ -209,6 +204,7 @@ body,
   overflow-x: hidden;
   gap: 0rem;
   color:#ffffcc;
+
   order:2;
 
 }
@@ -323,7 +319,8 @@ display: flex;
     margin-top: 0.5rem;
 
     font-style:normal;
-    color: #444;
+   color: #444;
+
 }
 
 /* Optional: column layout for multiple logos */
@@ -459,6 +456,7 @@ display: flex;
    margin-bottom: 0;
    padding-bottom: 0;
      /*box-sizing:border-box;*/
+  /* background-color: */
    background-color: #fef6e4;
    border-radius: 2px;
    top:0;
@@ -499,8 +497,8 @@ display: flex;
       flex: 1 1 70%;
        max-width:25%;
        flex-wrap: wrap;
-     /*background: #fff;*/
-       background:#ffffcc;
+       background:white;
+      /* background:#ffffcc;*/
        padding:0rem;
        /*padding: 10px;*/
        border-radius: 2px;
@@ -554,32 +552,20 @@ line-height: 1.2rem;
   flex-wrap: wrap;
   align-content: flex-start;
 
+ /* overflow: hidden;*/
 
-
-
-  /* overflow: hidden;*/
-
-
-
-
-    }
+}
 
 .destiny-column .logo-text {
   line-height: 1.2; /* or 1.4 for gentle breathing */
   margin: 0;
 }
 
-
-
-
-
-
-
 .tp-react-root .image-caption {
    margin-top: 0px;
    margin-bottom: 0px;
    font-size: 14px;
-    color: black;
+    color: black;   /*column and row caption*/
     text-align: center;
     font-style:normal;
      font-weight: bold;
@@ -1395,6 +1381,94 @@ background-color:white;
   max-width:200%;
   overflow-x: hidden; /* hides horizontal scrollbar */
 }
+
+.tp-react-root .product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8px; /* optional, for spacing like Bootstrap row */
+}
+
+.tp-react-root .product-grid > div {
+   flex: 1 1 calc(20% - 16px); /* 4 per row with padding */ /* 4 per row */
+  padding: 8px;
+}
+.tp-react-root .product-card img {
+  width: 75%;
+  height: 150px;       /* or whatever fits your design */
+  object-fit: contain; /* keeps aspect ratio, no cropping */
+}
+/* Tablet: 3 per row */
+@media (max-width: 992px) {
+  .tp-react-root .product-grid > div {
+    flex: 1 1 calc(33.333% - 16px);
+  }
+}
+
+/* Mobile: 2 per row */
+@media (max-width: 576px) {
+  .tp-react-root .product-grid > div {
+    flex: 1 1 calc(50% - 16px);
+  }
+}
+.custom-prev, .custom-next {
+  font-size: 4rem;
+  color: blue;
+}
+ .carousel-indicators [data-bs-target] {
+   background-color: blue !important;
+   width: 8px !important;
+   height: 4px !important;
+   opacity: 1 !important;
+ }
+
+.carousel-indicators [data-bs-target].active {
+  background-color: red !important; /* active dot color */
+}
+.carousel-indicators [data-bs-target]:hover {
+  border: 2px solid white;
+}
+.tp-react-root .footer p {
+  margin-top: 4px; /* tighten gap above p increase this value for more space */
+}
+.tp-react-root .me-10 {
+  margin-right: 4rem; /* or any value you want */
+}
+.tp-react-root .gap-5 {
+  gap: 8rem; /* or any value */
+}
+.tp-react-root .footer-col {
+  flex: 4; /* equal width for each span */
+  text-align: fixed; /* optional */
+}
+.tp-react-root .container-fluid.no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+.tp-react-root .product-grid .row {
+  gap: 0rem; /* consistent spacing */
+}
+/*.tp-react-root .laptop-row {
+  display: flex;
+  flex-wrap: wrap;
+}*/
+/*.tp-react-root .carousel-control-prev-icon,
+.tp-react-root .carousel-control-next-icon {
+  background-image: none !important; *//* force remove default SVG *//*
+
+}
+
+.tp-react-root .carousel-control-prev-icon::after {
+  content: '‹';
+  font-size: 2rem;
+  color: black !important; *//* force red *//*
+}
+
+.tp-react-root .carousel-control-next-icon::after {
+  content: '›';
+  font-size: 2rem;
+  color: black !important;
+}*/
+
 /*.tp-react-root .checkout-container {
   max-width:200%;
   overflow-y: hidden; *//* hides horizontal scrollbar *//*

@@ -4,11 +4,10 @@
     "paths": {
       "@img/*": ["assets/img/*"],
       "dev/*": ["dev/*"],
-
-
       "@components/*": ["components/*"],
       "@WelcomeSection/*": ["components/WelcomeSection/*"],
       "@cart/*": ["components/cart/*"],
+      "@layout/*": ["components/layout/*"],
       "@products/*": ["components/products/*"],
       "@interfaces/*": ["interfaces/*"]
     },

@@ -42,7 +42,9 @@ export const MobilePage = () => {
     return (
         <div className="mobile-page">
             <h5>💻 Mobiles with 20% Discount</h5>
-            <ProductList products={mobiles} />
+            <ProductList products={mobiles}
+                          favourites={[]}   // ✅ always pass something
+             />
         </div>
     );
 };

@@ -1,32 +1,27 @@
 import React from "react";
 import latop from '@img/latop.png';
+import { Product } from "../../typed/Product";
 
-interface CartItemProps {
+interface CartItemProps extends Product {
     id: string,
     productName: string,
+     modelName?: string;     // ✅ specific model
     name: string,
+
     originalPrice: number,  // ✅ new
     price: number,
     image: string,
     imageSrc: string,
-    quantity: number,
-    deliveryDates: string[],
-    onRemove: (id: string) => void,
+    quantity?: number,
+    deliveryDates?: string[],
+    onRemove?: (id: string) => void,
     discountPercentage: number,
     appliedPrice: number,
     isAvailableOnSelectedDate?: boolean | undefined,
     selectedDate?: string | null,
-    description?: string; // ✅ add this (optional if not always present)
-    saved:number
-
-
-
-
-
-
-
-
-
+    description?: string, // ✅ add this (optional if not always present)
+    saved?:number,
+    basePrice?: number;
 
 }
 
@@ -45,14 +40,16 @@ export const CartItem: React.FC<CartItemProps> = ({
                                                       discountPercentage,
                                                       selectedDate,
                                                       isAvailableOnSelectedDate,
-                                                      saved
+                                                      saved,
+                                                      basePrice
+
 
                                                   }) => {
 
 
 
 
-    const subtotal = (appliedPrice ?? price) * quantity;
+    const subtotal = (appliedPrice ?? price) * (quantity??1);
 
    /* Subtotal: ₹{((item.appliedPrice !== undefined ? item.appliedPrice : item.originalPrice) * item.quantity)}*/
 
@@ -70,6 +67,7 @@ export const CartItem: React.FC<CartItemProps> = ({
                 <div className="mb-2">Product Name:{name}</div>
                 <div className="mb-2">Description:{description}</div>
                 <div className="mb-2 d-flex justify-content-between"> <span>Total MRP:</span>
+                {/* <span><s>₹rs<strong>{basePrice.toFixed(2)}</strong></s></span>*/}
                     <span><s>₹<strong>{originalPrice.toFixed(2)}</strong></s></span>
                 </div>
                 <div className="mb-2 d-flex justify-content-between text-success">
@@ -108,7 +106,7 @@ export const CartItem: React.FC<CartItemProps> = ({
 
 
                 <ul>
-                    {deliveryDates.map((date, index) => (
+                    {(deliveryDates??[]).map((date, index) => (
                         <li key={index}>{date}</li>
                     ))}
                 </ul>

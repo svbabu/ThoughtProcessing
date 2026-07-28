@@ -10,54 +10,61 @@ import {db} from "../../firebase";
 import { getDocs,deleteDoc,addDoc,doc,setDoc,updateDoc } from 'firebase/firestore';
 import promise = toast.promise;
 import { AddressFormType } from '../../typed/AddressFormType';
+import { ShippingAddressDto,AddressWithId } from '../../typed/ShippingAddressDto';
+import { saveAddress,fetchDefaultAddress,fetchAddresses,deleteAddress} from '../../typed/AddressService';
 /*import { AddressFormType } from '../../typed/address'; // adjust path as needed*/
 
-/*
-interface AddressWithId extends AddressFormType {
-  id: string;
-  //useDefault?: boolean; // mirrors backend field, but optional in Firebase
-    //isDefault?: boolean;
-    // onAddressSaved?: () => void;
-}
- */
 
+/* export interface ShippingAddressDto {
+  id?: string;
+  userId: string;
+  fullName: string;
+  buildingName?: string;
+  streetName?: string;
+  city?: string;
+  state?: string;
+  pincode?: string;
+  mobileNumber?: string;
+  landmark?: string;
+  //addressType?: string;
+  addressType: 'Home' | 'Office' | '';
+  useDefault?: boolean;
+} */
 
 interface ShippingAddressProps {
     form: AddressFormType;
    setForm: React.Dispatch<React.SetStateAction<AddressFormType>>;
     onContinue: () => void;
-    onAddressSaved?: () => void
+     onAddressSaved?: (address: ShippingAddressDto) => void; // 👈 updated
+    //onAddressSaved?: () => void
     isEditing: boolean;   // 🔑 add this
       setIsEditing: React.Dispatch<React.SetStateAction<boolean>>; // 🔑 add this
       showForm: boolean;
       setShowForm: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-
-/* type AddressFormType= {
-   userId:string,
-    fullName: string,
-    mobileNumber:string,
-    pincode: string,
-    city: string,
-    state: string,
-    buildingName: string,
-    streetName: string,
-    landmark: string,
-    addressType: string,
-    useDefault: false,
-
+/* interface AddressWithId extends AddressFormType {
+  id?: string;
+  firestoreId?: string;  // Firestore document ID (string like "2AXDu5elQwJeT66HYCcZ")
+  backendId?: number;
+  //useDefault?: boolean; // mirrors backend field, but optional in Firebase
+    //isDefault?: boolean;
+    // onAddressSaved?: () => void;
 } */
 
-/*function AddressForm(props: { onClose: () => void }) {
-    return null;
-}*/
+
 
 export const ShippingAddress: React.FC<ShippingAddressProps> = (
     { form, setForm, onContinue, onAddressSaved, isEditing, setIsEditing,
          showForm, setShowForm}) => {
 
+             const [isSaving, setIsSaving] = useState(false);
+              const [addresses, setAddresses] = useState<AddressWithId[]>([]);
+                const [defaultAddress, setDefaultAddress] = useState<any>(null);
+
 const initialFormState: AddressFormType = {
+ firestoreId: '',
+   backendId: undefined,
   userId: '',
   fullName: '',
   mobileNumber: '',
@@ -70,8 +77,22 @@ const initialFormState: AddressFormType = {
   addressType: '',
   useDefault: false,
 };
+const mapFormToPayload = (formData: AddressFormType, userId: string) => ({
+ userId,
+   fullName: formData.fullName,
+   mobileNumber: formData.mobileNumber,
+   buildingName:formData.buildingName,
+   streetName:formData.streetName,
+   pincode: formData.pincode,   // 🔑 mapped correctly
+   city: formData.city,
+   state: formData.state,
+   addressLine1: `${formData.buildingName} ${formData.streetName}`,
+   landmark: formData.landmark,
+   addressType: formData.addressType,
+   useDefault: formData.useDefault,
+});
 //const [form, setForm] = useState<AddressFormType>(initialFormState);
-const [isSaving, setIsSaving] = useState(false);
+
  //const [showForm, setShowForm] = useState(false);
 //const [isEditing, setIsEditing] = useState(false);
                     /* {
@@ -135,8 +156,10 @@ const saveAddress = async (formData: AddressFormType) => {
     throw error;
   }
 };
+
  */
- const saveAddress = async (formData: AddressFormType) => {
+ //const saveAddress = async (formData: AddressFormType) => {
+   /*   const saveAddress = async (formData: AddressFormType): Promise<ShippingAddressDto> => {
    const userId = getAuth().currentUser?.uid;
    if (!userId) throw new Error("User not authenticated");
 
@@ -146,7 +169,8 @@ const saveAddress = async (formData: AddressFormType) => {
        await setDoc(doc(db, "addresses", formData.id), {
          ...formData,
          userId,
-         isDefault: formData.useDefault,
+         useDefault: formData.useDefault,   // ✅ aligned
+         //isDefault: formData.useDefault,
        }, { merge: true });
      } else {
        // ✅ Adding new address
@@ -154,17 +178,30 @@ const saveAddress = async (formData: AddressFormType) => {
        await setDoc(newDocRef, {
          ...formData,
          userId,
-         isDefault: formData.useDefault,
+         useDefault: formData.useDefault,   // ✅ aligned
+         //isDefault: formData.useDefault,
        });
      }
 
      // ✅ Save to backend too
-     await axios.post("http://localhost:8081/api/shipping/save", { ...formData, userId }, {
+      // Editing existing address → call update
+       await axios.put(`http://localhost:8081/api/shipping/update/${formData.id}`, {
+         ...formData,
+         userId,
+         useDefault: formData.useDefault,
+       });
+     const response=await axios.post("http://localhost:8081/api/shipping/save",
+         { ...formData, userId, useDefault: formData.useDefault }, {
        headers: { "Content-Type": "application/json" }
      });
-
+  const savedAddress: ShippingAddressDto = response.data;
+      //const savedAddress = response.data; // this is your ShippingAddressDto
      toast.success("Address saved successfully!");
-     return true;
+     setForm(initialFormState);
+     if (onAddressSaved) onAddressSaved(savedAddress); // pass the DTO back
+     //setAddresses(prev => [...prev, savedAddress]); // or replace if editing
+     //return true;
+     return savedAddress;
    } catch (error) {
      console.error("❌ Failed to save address:", error);
      toast.error("Failed to save address");
@@ -172,9 +209,221 @@ const saveAddress = async (formData: AddressFormType) => {
    }
  };
 
+ */
+/*
+const saveAddress = async (formData: AddressFormType): Promise<ShippingAddressDto> => {
+  const userId = getAuth().currentUser?.uid;
+  if (!userId) throw new Error("User not authenticated");
+
+  try {
+    let savedAddress: ShippingAddressDto;
+
+    if (formData.id) {
+      // ✅ Editing existing address in Firestore
+      await setDoc(doc(db, "addresses", formData.firestoreId!), {
+        ...formData,
+        userId,
+        useDefault: formData.useDefault,
+      }, { merge: true });
+
+      // ✅ Update in backend
+      const response = await axios.put(
+        `http://localhost:8081/api/shipping/update/${formData.backendId}`,
+        { ...formData, userId, useDefault: formData.useDefault },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      savedAddress = response.data;
+
+    } else {
+      // ✅ Adding new address in Firestore
+      const newDocRef = doc(collection(db, "addresses"));
+      await setDoc(newDocRef, {
+        ...formData,
+        userId,
+        useDefault: formData.useDefault,
+      });
+
+      // ✅ Save in backend
+      const response = await axios.post(
+        "http://localhost:8081/api/shipping/save",
+        { ...formData, userId, useDefault: formData.useDefault },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      savedAddress = response.data;
+    }
+
+    toast.success("Address saved successfully!");
+    setForm(initialFormState);
+    if (onAddressSaved) onAddressSaved(savedAddress);
+
+    return savedAddress;
+  } catch (error) {
+    console.error("❌ Failed to save address:", error);
+    toast.error("Failed to save address");
+    throw error;
+  }
+};
+ */
+//const [form, setForm] = useState<AddressFormType>(initialFormState);
+
+//const saveAddress = async (formData: AddressWithIds): Promise<ShippingAddressDto> => {
+
+ /* const saveAddress = async (formData: AddressFormType): Promise<ShippingAddressDto> => {
+  const userId = getAuth().currentUser?.uid;
+   if (!userId) throw new Error("User not authenticated");
+  // Firestore payload (can keep your original fields)
+  const firestorePayload = {
+    ...formData,
+    userId,
+    useDefault: formData.useDefault,
+  };
+ // Backend payload (mapped to backend expectations)
+ const backendPayload = mapFormToPayload(formData, userId);
+//const userId = getAuth().currentUser?.uid;
 
 
+  try {
+    let savedAddress: ShippingAddressDto;
 
+    if (formData.firestoreId && formData.backendId) {
+      // Firestore update
+      await setDoc(doc(db, "addresses", formData.firestoreId),
+      firestorePayload, { merge: true });
+
+      // Backend update
+      const response = await axios.put(
+           `http://localhost:8081/api/shipping/update/${formData.backendId}`,
+              backendPayload,
+              { headers: { "Content-Type": "application/json" } }
+            );
+         *//* `http://localhost:8081/api/shipping/update/${formData.backendId}`,
+        { ...formData, userId, useDefault: formData.useDefault },
+        { headers: { "Content-Type": "application/json" } }
+      ); *//*
+      savedAddress = response.data;
+
+    } else {
+      // Firestore create
+      const newDocRef = doc(collection(db, "addresses"));
+      await setDoc(newDocRef, backendPayload);
+
+      // Backend create
+      //const response = await axios.post(
+           const response = await axios.post(
+              "http://localhost:8081/api/shipping/save",
+              backendPayload,
+              { headers: { "Content-Type": "application/json" } }
+      *//*    "http://localhost:8081/api/shipping/save",
+        { ...formData, userId, useDefault: formData.useDefault },
+        { headers: { "Content-Type": "application/json" } } *//*
+      );
+      savedAddress = response.data;
+      // merge backendId back into Firestore
+        await setDoc(newDocRef, { backendId: savedAddress.id }, { merge: true });
+    }
+
+    toast.success("Address saved successfully!");
+    setForm(initialFormState);
+    if (onAddressSaved) onAddressSaved(savedAddress);
+
+    return savedAddress;
+  } catch (error) {
+    console.error("❌ Failed to save address:", error);
+    toast.error("Failed to save address");
+    throw error;
+  }
+}; */
+/* const handleSave = async () => {
+    try {
+      const userId = getAuth().currentUser?.uid;
+      if (!userId) {
+        toast.error("User not authenticated");
+        return;
+      }
+   *//* const payload = { ...form, userId, useDefault: form.useDefault };
+    await saveAddress(payload); *//*
+
+      // ✅ Just pass form, since saveAddress handles mapping
+      const savedAddress = await saveAddress(form);
+      // 🔑 Update addresses state: replace existing or add new
+          setAddresses(prev =>
+            prev.some(a => a.backendId === savedAddress.id)
+              ? prev.map(a =>
+                  a.backendId === savedAddress.id ? { ...a, ...savedAddress } : a
+                )
+              : [...prev, { ...savedAddress }]
+          );
+
+          // If default flag is set, update defaultAddress state too
+          if (savedAddress.useDefault) {
+            setDefaultAddress(savedAddress);
+          }
+
+      toast.success("Address saved successfully!");
+      onClose(); // ✅ Close form manually
+    } catch (error) {
+      console.error("❌ Failed to save address:", error);
+      toast.error("Failed to save address");
+    }
+  }; */
+const handleSave = async () => {
+  setIsSaving(true);
+  try {
+    const savedAddress = await saveAddress(form);
+    console.log("Saving form from shipping address:", form);
+       // ✅ propagate backendId into form state
+        //setForm(prev => ({ ...prev, backendId: savedAddress.id }));
+
+    // Update local addresses state
+    setAddresses(prev =>
+      prev.some(a => a.id === savedAddress.id)
+        ? prev.map(a =>
+            a.id === savedAddress.id ? { ...a, ...savedAddress } : a
+          )
+        : [...prev, { ...savedAddress }]
+    );
+
+
+    // Update default address if flagged
+    if (savedAddress.useDefault) {
+      setDefaultAddress(savedAddress);
+    }
+
+    // Propagate to parent if needed
+    if (onAddressSaved) onAddressSaved(savedAddress);
+
+    toast.success("from shipping Address saved successfully!");
+    onClose(); // reset + close form
+  } catch (error) {
+    console.error("❌ Failed to save address:", error);
+    toast.error("Failed to save address");
+  } finally {
+    setIsSaving(false); // always reset
+  }
+};
+
+useEffect(() => {
+  const loadAddresses = async () => {
+    const list = await fetchAddresses();
+    setAddresses(list);
+
+    const def = await fetchDefaultAddress();
+    if (def) setDefaultAddress(def);
+  };
+  loadAddresses();
+}, []);
+
+/* useEffect(() => {
+    (async () => {
+      await fetchAddresses(); // calls your service to get all addresse
+      const def = await fetchDefaultAddress(); // calls your service to get default
+      if (def) setDefaultAddress(def);  // store result in component state
+    })();
+  }, []);
+ useEffect(() => {
+   fetchAddresses();       // ✅ load all addresses
+   fetchDefaultAddress();  // ✅ load default address
+ }, []); */
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) =>
     {
@@ -214,10 +463,10 @@ const saveAddress = async (formData: AddressFormType) => {
     // ✅ Only set isSaving once validation passes
           setIsSaving(true);
           try {
-                               await saveAddress(form);
-                                  toast.success("Address submitted successfully!");
+                           const savedAddress = await saveAddress(form);
+                                  toast.success(" from shipping Address submitted successfully!");
                                   setForm(initialFormState);
-                                  if (onAddressSaved) onAddressSaved();
+                                  if (onAddressSaved) onAddressSaved(savedAddress);
                              /*  const response = await axios.post("/api/shipping/save", formData);
                               return response.data; */
                           } catch (error) {
@@ -225,7 +474,10 @@ const saveAddress = async (formData: AddressFormType) => {
                               toast.error("Failed to submit address");
                               throw error;
                           }
-
+                       finally {
+                        setIsSaving(false); // ✅ always reset
+                      }
+};
           /* try {
         const userId = getAuth().currentUser?.uid;
 
@@ -300,7 +552,7 @@ const saveAddress = async (formData: AddressFormType) => {
  */
 
 
-    };
+
 
 
 const handleAddNew = () => {
@@ -308,17 +560,72 @@ const handleAddNew = () => {
   setForm(initialFormState);
   setShowForm(true);
 };
+const handleEdit = (address: AddressWithId) => {
+     setForm({
+       ...address,
+       firestoreId: address.firestoreId, // keep Firestore doc ID
+       id: address.id,                   // use backend PK
+     });
+     setIsEditing(true);   // mark editing mode
+     setShowForm(true);    // open the form
+   };
+/*
+export const deleteAddress = async (address: AddressWithId) => {
+  try {
+    // Delete from backend if backendId exists
+    if (address.id || address.backendId) {
+      await axios.delete(`http://localhost:8081/api/shipping/delete/${address.id ?? address.backendId}`);
+    }
 
-const handleEdit = (address: AddressFormType) => {
+    // Delete from Firestore if firestoreId exists
+    if (address.firestoreId) {
+      await deleteDoc(doc(db, "addresses", address.firestoreId));
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error deleting address:", error);
+    throw error;
+  }
+};
+ */
+
+/* const handleEdit = (address: AddressFormType) => {
   setIsEditing(true);
   setForm(address);
   setShowForm(true);
+}; */
+/*
+const handleSave = async () => {
+  try {
+    const userId = getAuth().currentUser?.uid;
+    if (!userId) {
+      toast.error("User not authenticated");
+      return;
+    }
+
+     // Merge userId and useDefault into the form before saving
+        const payload = {
+          ...form,
+          userId,
+          useDefault: form.useDefault,   // ✅ ensure consistency
+        };
+    //delete (payload as any).isDefault; // ✅ remove legacy field
+    //await saveAddress(payload);
+    await saveAddress(form);
+    onClose(); // ✅ Close form manually
+  } catch (error) {
+    console.error("❌ Failed to save address:", error);
+    toast.error("Failed to save address");
+  }
 };
- const handleSave = async () => {
-                /* await saveAddress(form,userId,promise); */
+ */
+
+/*  const handleSave = async () => {
+                 *//* await saveAddress(form,userId,promise); *//*
   await saveAddress(form);
   onClose(); // ✅ Close form manually
-  };
+  }; */
 const handleCancel = () => {
     onClose(); // ✅ Close form manually
  };

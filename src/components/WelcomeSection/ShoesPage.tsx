@@ -40,7 +40,9 @@ export const ShoesPage = () => {
     return (
         <div className="Shoes-page">
             <h5>💻 Shoes with 15% Discount</h5>
-            <ProductList products={shoes} />
+            <ProductList products={shoes}
+                          favourites={[]}   // ✅ always pass something
+             />
         </div>
     );
 };

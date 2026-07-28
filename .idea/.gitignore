@@ -18,6 +18,8 @@ node_modules/
 # Build output
 build/
 dist/
+#src files with cred
+src/firebase.ts
 # Logs
 npm-debug.log*
 yarn-debug.log*

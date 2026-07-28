@@ -7,6 +7,7 @@ export interface CartItem {
     imageSrc: string;
     appliedPrice: any;
     productName: string ;
+    modelName?:string;
     description?: string; // ✅ add this (optional if not always present)
     originalPrice: number;   // ✅ new
     id: string;
@@ -17,7 +18,8 @@ export interface CartItem {
     deliveryDates: string[]; // ✅ Add this line
     date:string;
     selectedDate?: string | null;
-    saved:number
+    saved:number,
+    basePrice: number
 
 
 

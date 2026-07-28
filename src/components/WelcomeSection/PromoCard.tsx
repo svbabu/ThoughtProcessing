@@ -24,7 +24,11 @@ import { useNavigate } from 'react-router-dom';
                     src={imageSrc}
                     alt={productName}
                     style={{ cursor: 'pointer' }}
-                    onClick={() => navigate(navigateTo)}
+                    onClick={() => {
+                      if (navigateTo) {
+                        navigate(navigateTo);
+                      }
+                    }}
                 />
                 <div className="discount-overlay">
                     {discount}% OFF

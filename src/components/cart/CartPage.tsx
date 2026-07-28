@@ -174,7 +174,13 @@ const { isUserLoggedIn } = useAuth();
                                        </div>
                                              <div className="col-md-9">
                                             <div className="card-body">
-                                             <h5 className="card-title">{item.name}</h5>
+                                             <h5 className="card-title">{item.modelName ?? item.productName}</h5>
+                                            {/* ✅ Muted description below */}
+                                              {item.description && (
+                                                <p className="text-muted mb-2">
+                                                  {item.description}
+                                                </p>
+                                              )}
                                             <p>
                                              <span className="text-muted text-decoration-line-through">
                                               ₹{item.originalPrice}

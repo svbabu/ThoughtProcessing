@@ -72,7 +72,10 @@ console.log("API_URL:", process.env.REACT_APP_API_URL);
     useEffect(() => {
         console.log("API_URL:", process.env.REACT_APP_API_URL);
         const payload = [
-          {
+                 { productId: 1, offerId: 2 }, // Diwali Festival Discount
+                 { productId: 1, offerId: 3 }, // Summer Promo
+                 { productId: 1, offerId: 1 }
+        /*   {
             productName: "Laptop",
             originalprice: 40000,
             offer: { description: "Diwali Festival Offer", discount: 30.0 }
@@ -91,7 +94,7 @@ console.log("API_URL:", process.env.REACT_APP_API_URL);
             productName: "Laptop",
             originalprice: 80000,
             offer: { description: "New Year Sale", discount: 25.0 }
-          }
+          } */
         ];
      // fetch("http://localhost:8081/api/prod-offers/calculate", {
             //fetch("/api/prod-offers/calculate", {

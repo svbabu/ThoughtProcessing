@@ -20,15 +20,20 @@ import Checkout from '@cart/Checkout';
 import OrderSuccess from '@cart/OrderSuccess';
 import AccountsPage from '@cart/AccountsPage';
 import {AuthProvider} from './components/cart/AuthProvider';
+import Favourites from '@cart/Favourites';
 
+import ElectronicsSection from "@layout/ElectronicsSection";
+import SearchProvider from "@layout/SearchProvider";
 
+// Import Bootstrap CSS globally
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 /* cart imports */
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import { LaptopPage } from './components/WelcomeSection/LaptopPage';
 import { MobilePage } from './components/WelcomeSection/MobilePage';
 import { ShoesPage} from './components/WelcomeSection/ShoesPage';
-
+import { FavouritesProvider } from "@cart/FavouritesContext";
 
 
 
@@ -57,7 +62,8 @@ if (container) {
 
     <AuthProvider>
     <CartProvider>
-
+        <SearchProvider>   {/* ✅ wrap here */}
+        <FavouritesProvider>   {/* ✅ wrap here */}
         <BrowserRouter>
 
         <div className="tp-react-root">
@@ -74,10 +80,10 @@ if (container) {
                 {/* 💻 Laptop page needs Navbar from Layout */}
                 {/*<Route path="/projects/laptops" element={<Layout showNavbar={true}><LaptopPage /></Layout>} />*/}
                  {/* <Route path="/home" element={<Layout showNavbar={true}><HomePage /></Layout>} />*/}
-                <Route path="/laptops" element={<Layout showNavbar={true}><LaptopPage /></Layout>} />
+                <Route path="/laptops" element={<Layout showNavbar={false}><LaptopPage /></Layout>} />
                 <Route path="/mobiles" element={<Layout showNavbar={true}><MobilePage /></Layout>} />
                 <Route path="/shoes" element={<Layout showNavbar={true}><ShoesPage /></Layout>} />
-
+                 {/* <Route path="/electronics/laptops" element={<Layout showNavbar={true}><ElectronicsSection /></Layout>} /> */}
           {/* Add more routes here */}
            <Route path="/cart" element={<Layout showNavbar={false}><CartPage /></Layout>} />
                 <Route path="/checkout" element={<Layout showNavbar={false}><Checkout /></Layout>} />
@@ -92,10 +98,17 @@ if (container) {
 
 
               <Route path="/home" element={<HomePage />} />
-               <Route path="/account" element={<AccountsPage />} />
-               <Route path="/checkout" element={<Checkout />} />
-               <Route path="/cart" element={<CartPage />} />
+              {/*  <Route path="/account" element={<AccountsPage />} />
+                <Route path="/checkout" element={<Checkout />} />
+               <Route path="/cart" element={<CartPage />} /> */}
+               <Route path="/electronics/*" element={<ElectronicsSection />} />
 
+                 <Route path="/" element={<AccountsPage />} />
+                     <Route path="/favourites" element={<Favourites
+                       favourites={[]} // or pass state down
+                       onRemove={() => {}}
+                       onAddToCart={() => {}}
+                     />} />
 
 
 
@@ -128,6 +141,8 @@ if (container) {
        {/* ✅ Global reCAPTCHA container */}
                 <div id="recaptcha-container" style={{ display: 'none' }}></div>
         </BrowserRouter>
+          </FavouritesProvider>
+          </SearchProvider>
         </CartProvider>
 </AuthProvider>
 

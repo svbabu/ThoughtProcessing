@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import { auth,db } from "../../firebase";
 import { useAuth } from "./AuthProvider"; // centralized auth context
 import axios from 'axios';
@@ -21,7 +21,9 @@ import  hpEnvyx360 from '@img/hpenvyx360.png';
 import  acerSwift from '@img/acerswift.png';
 import FavouriteItem from "./FavouriteItem";
 import {Product,FavouriteProduct} from '../../typed/Product';
-
+import {Order,OrderItem} from '../../typed/Order';
+import { getImageSrc } from "../../utils/getImageSrc";
+import  OrderStatusTimeline from "./ OrderStatusTimeline" ;
 import {
   Box,
   Typography,
@@ -30,64 +32,211 @@ import {
   Slider,
   Checkbox,
   FormControlLabel,
+  //Grid
 } from "@mui/material";
+import Grid from "@mui/material/Grid";
+
+import {
+  Timeline, TimelineItem, TimelineSeparator, TimelineDot,
+  TimelineConnector, TimelineContent
+}
+from "@mui/lab";
 
 
 
+/* interface OrderDetailsProps {
+  order: Order;
+} */
 
-//const OrderDetails: React.FC = () => {
-  /* const { orderId } = useParams();
+const OrderDetails: React.FC = () => {
+  const { orderId } = useParams();
   const [order, setOrder] = useState<Order | null>(null);
 
-  useEffect(() => {
-    axios.get(`/api/orders/${orderId}`).then(res => setOrder(res.data));
-  }, [orderId]);
+
+ const productImages: Record<string, string> = {
+        "Laptop": latop,
+        "Mobile Phone": mobile,
+        "Shoes": shoes,
+        "Asus Zenbook": asusZenbook,
+          "Dell XPS": dellXps,
+          "MacBook Pro": macbookPro,
+          "HP Spectre": hpSpectre,
+          "Lenovo Thinkpad": lenovoThinkpad,
+          "MacBook Air": macbookAir,
+          "Dell Latitude": dellLatitude,
+          "MSI Stealth": msiStealth,
+          "HP Envy x360": hpEnvyx360,
+          "Acer Swift": acerSwift,
+
+
+
+    };
+
+ useEffect(() => {
+   const fetchOrder = async () => {
+     try {
+       const res = await axios.get(`http://localhost:8081/api/orders/${orderId}`);
+       const orderData: Order = res.data;
+
+       // No need to enrich with products if order items already have details
+       setOrder(orderData);
+     } catch (err) {
+       console.error("Failed to fetch order", err);
+     }
+   };
+
+   fetchOrder();
+ }, [orderId]);
+
 
   if (!order) return <p>Loading...</p>;
 
-  return (
-    <Box>
-      <Typography variant="h6">Order ID {order.id}</Typography>
-      <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-        <img src={order.image} alt={order.productName} width={100} />
-        <Box>
-          <Typography>{order.productName}</Typography>
-          <Typography>₹{order.price}</Typography>
-          <Typography>Colour: {order.color}</Typography>
-          <Typography>Delivered on: {order.deliveredDate}</Typography>
+return (
+  <Box sx={{ mt: 3 }}>
+    {/* Page heading */}
+    <Typography variant="h4" gutterBottom>
+      Order Details
+    </Typography>
+
+    {/* Divider */}
+    <Divider
+      sx={{
+        my: 2,
+        borderStyle: "solid",
+        borderColor: "#1976d2",
+        borderBottomWidth: 3,
+      }}
+    />
+
+    {/* Order ID row */}
+    <Typography variant="subtitle1" gutterBottom>
+      Order ID: {order.orderId}
+    </Typography>
+
+    {/* Items list */}
+    {order.items.map((item: OrderItem) => {
+      console.log("Image src:", getImageSrc(item)); // logs each item’s URL
+      return (
+        <Box
+          key={item.productId}
+          sx={{
+            display: "flex",
+            gap: 2,
+            mt: 2,
+            borderBottom: "1px solid #eee",
+            pb: 2,
+          }}
+        >
+          <img
+            src={getImageSrc(item)}
+            alt={item.productName}
+            width={100}
+            style={{ objectFit: "contain" }} // optional: keeps aspect ratio
+          />
+          <Box>
+            {/* <Typography variant="body1">{item.productName}</Typography> */}
+            <Typography variant="body2" color="text.secondary">
+              {item.modelName}
+            </Typography>
+            <Typography variant="body2">{item.description}</Typography>
+            <Typography>Qty: {item.quantity}</Typography>
+            <Typography>
+              ₹{item.appliedPrice} (MRP: ₹{item.basePrice})
+            </Typography>
+            <Typography color="success.main">
+              Discount: {item.discountPercentage}%
+            </Typography>
+            <Typography>₹{item.price}</Typography>
+          </Box>
         </Box>
-      </Box>
+      );
+    })}
 
-      { *//* Timeline *//* }
-      <Box sx={{ mt: 3 }}>
-        <Typography variant="subtitle2">Order Status</Typography>
-        {order.timeline.map(step => (
-          <Typography key={step.date} color="text.secondary">
-            {step.status} — {step.date}
-          </Typography>
-        ))}
-      </Box>
-
-      { *//* Shipping details *//* }
-      <Box sx={{ mt: 3 }}>
-        <Typography variant="subtitle2">Shipping Details</Typography>
-        <Typography>{order.customerName}</Typography>
-        <Typography>{order.address}</Typography>
-        <Typography>{order.city}, {order.state}, {order.pincode}</Typography>
-        <Typography>Mobile: {order.mobile}</Typography>
-      </Box>
-
-      { *//* Price details *//* }
-      <Box sx={{ mt: 3 }}>
-        <Typography variant="subtitle2">Price Details</Typography>
-        <Typography>Total MRP: ₹{order.mrp}</Typography>
-        <Typography>Offer Discount: -₹{order.discount}</Typography>
-        <Typography>COD Charges: ₹{order.codCharges}</Typography>
-        <Typography>Shipping: ₹{order.shipping}</Typography>
-        <Typography>Platform Fee: ₹{order.platformFee}</Typography>
-        <Typography fontWeight="bold">Total Amount: ₹{order.total}</Typography>
-        <Typography>Payment method: {order.paymentMethod}</Typography>
-      </Box>
+    {/* Timeline */}
+    <Box sx={{ mt: 3 }}>
+      <Typography variant="h6">Order Status</Typography>
+      <OrderStatusTimeline
+        timeline={order.timeline?.map((step) => ({
+          status: step.status,
+          statusTime: step.statusTime,
+          remarks: step.remarks,
+        }))}
+      />
+      <Typography color="error" sx={{ mt: 2 }}>
+        Exchange & Return not available
+      </Typography>
     </Box>
-  ); */
-//};
+
+    {/* Split two columns below timeline */}
+    {/* Split two columns below timeline */}
+    {/* Split two columns below timeline */}
+    <Grid container spacing={5}>
+      {/* Left: Shipping Details */}
+      <Grid size={{ xs: 12, sm: 6 }}>
+        <Typography variant="h6">Shipping Details</Typography>
+        <Typography>{order.shippingAddress?.fullName}</Typography>
+        <Typography>
+          {order.shippingAddress?.buildingName}, {order.shippingAddress?.streetName}
+        </Typography>
+        <Typography>
+          {order.shippingAddress?.city}, {order.shippingAddress?.state}{" "}
+          {order.shippingAddress?.pincode}
+        </Typography>
+        <Typography>Mobile: {order.shippingAddress?.mobileNumber}</Typography>
+      </Grid>
+     {/* Right: Price + Payment Details */}
+       <Grid size={{ xs: 12, sm: 6 }}>
+         <Box sx={{ mt: 3 }}>
+           <Typography variant="h6">Price Details of Your Order</Typography>
+           <Grid container spacing={1}>
+             <Grid size={{ xs: 6 }}><Typography>Total MRP:</Typography></Grid>
+             <Grid size={{ xs: 6 }}>
+               <Typography>
+                 ₹{order.items.reduce((sum, item) => sum + item.basePrice * item.quantity, 0)}
+               </Typography>
+             </Grid>
+         <Grid size={{ xs: 6 }}><Typography>Offer Discount:</Typography></Grid>
+                 <Grid size={{ xs: 6 }}>
+                   <Typography>
+                     - ₹{order.items.reduce(
+                       (sum, item) => sum + (item.basePrice - item.appliedPrice) * item.quantity,
+                       0
+                     )}
+                   </Typography>
+                 </Grid>
+
+                 <Grid size={{ xs: 6 }}><Typography>Cash on Delivery Charges:</Typography></Grid>
+                 <Grid size={{ xs: 6 }}>
+                   <Typography>
+                     ₹{order.payments?.[0]?.method?.toLowerCase() === "cod" ? 30 : 0}
+                   </Typography>
+                 </Grid>
+
+      <Grid size={{ xs: 6 }}><Typography>Furniture & Large Items Shipping:</Typography></Grid>
+             <Grid size={{ xs: 6 }}><Typography>₹249</Typography></Grid>
+
+             <Grid size={{ xs: 6 }}><Typography>Platform Fee Details:</Typography></Grid>
+             <Grid size={{ xs: 6 }}><Typography>₹10</Typography></Grid>
+
+             <Grid size={{ xs: 6 }}><Typography variant="subtitle1">Total Amount:</Typography></Grid>
+             <Grid size={{ xs: 6 }}><Typography variant="subtitle1">₹{order.totalAmount}</Typography></Grid>
+           </Grid>
+         </Box>
+ <Box sx={{ mt: 3 }}>
+      <Typography variant="h6">Payment Method</Typography>
+      <Grid container spacing={1}>
+        <Grid size={{ xs: 6 }}><Typography>Method:</Typography></Grid>
+        <Grid size={{ xs: 6 }}><Typography>{order.payments?.[0]?.method?.toUpperCase()}</Typography></Grid>
+
+        <Grid size={{ xs: 6 }}><Typography>Amount:</Typography></Grid>
+        <Grid size={{ xs: 6 }}><Typography>₹{order.payments?.[0]?.amount}</Typography></Grid>
+      </Grid>
+    </Box>
+  </Grid>
+</Grid>
+
+  </Box>
+);
+
+};
+export default OrderDetails;

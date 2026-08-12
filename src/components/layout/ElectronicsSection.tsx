@@ -21,7 +21,8 @@ const ElectronicsSection = () => {
              <Route path="laptops" element={<LaptopPage />} />
              <Route path="mobiles" element={<MobilePage />} />
               <Route path="/electronics/*" element={<ElectronicsSection />} />
-
+             {/* <Route path="/orders" element={<FilteredOrders />} />
+                     <Route path="/orders/:orderId" element={<OrderDetails />} /> */}
              {/* add AccessoriesPage, OffersPage similarly */}
            </Routes>
     </AppLayout>

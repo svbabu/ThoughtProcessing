@@ -21,13 +21,16 @@ import OrderSuccess from '@cart/OrderSuccess';
 import AccountsPage from '@cart/AccountsPage';
 import {AuthProvider} from './components/cart/AuthProvider';
 import Favourites from '@cart/Favourites';
+import FilteredOrders from '@cart/FilteredOrders';
+import  OrderDetails from '@cart/ OrderDetails';
+
 
 import ElectronicsSection from "@layout/ElectronicsSection";
 import SearchProvider from "@layout/SearchProvider";
 
 // Import Bootstrap CSS globally
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import './css/styles.css';
 /* cart imports */
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import { LaptopPage } from './components/WelcomeSection/LaptopPage';
@@ -110,7 +113,8 @@ if (container) {
                        onAddToCart={() => {}}
                      />} />
 
-
+                <Route path="/orders" element={<FilteredOrders />} />
+                  <Route path="/orders/:orderId" element={<OrderDetails />} />
 
             </Routes>
 

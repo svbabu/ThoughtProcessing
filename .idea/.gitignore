@@ -20,6 +20,8 @@ build/
 dist/
 #src files with cred
 src/firebase.ts
+#src files with db
+src/db.ts
 # Logs
 npm-debug.log*
 yarn-debug.log*
@@ -34,3 +36,9 @@ yarn-error.log*
 /.idea/misc.xml
 /.idea/intelliLang.xml
 /.vscode/
+# OS files
+.DS_Store
+Thumbs.db
+#coverage and out files
+out/
+coverage/

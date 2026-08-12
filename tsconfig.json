@@ -25,8 +25,9 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist"
   },
   "files": ["src/typed/custom.d.ts"],
-  "include": ["src"]
+  "include": ["src","server.ts"]
 }

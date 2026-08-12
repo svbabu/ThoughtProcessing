@@ -26,12 +26,14 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.0.1",
+    "@mui/lab": "^9.0.0-beta.6",
     "@mui/material": "^9.0.1",
     "axios": "^1.12.2",
     "bootstrap": "^5.3.8",
     "cors": "^2.8.6",
     "date-fns": "^4.1.0",
     "firebase": "^9.0.0",
+    "pg": "^8.22.0",
     "react": "^19.1.1",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.1.1",
@@ -49,6 +51,7 @@
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
     "@types/cors": "^2.8.19",
+    "@types/pg": "^8.20.4",
     "@types/react": "^18.3.24",
     "@types/react-bootstrap": "^1.0.1",
     "@types/react-dom": "^18.3.7",
@@ -66,5 +69,11 @@
     "webpack": "^5.101.3",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.2.2"
+  },
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8081",
+      "changeOrigin": true
+    }
   }
 }

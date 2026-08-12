@@ -28,6 +28,7 @@ import {
 import { AddressFormType } from '../../typed/AddressFormType';
 import AddressBook from "./AddressBook";
 import ProfilePage from "./ProfilePage";
+import OrderHistory from "./OrderHistory";
 //import Favourites from "./Favourites";
 import profileicon from "@img/profileicon.png";
 import addressbookicon from "@img/addressbookicon.png";
@@ -51,38 +52,6 @@ import { CartItem } from '@cart/CartContext';
 import latop from '@img/latop.png';
 import { useFavourites } from "@cart/FavouritesContext";
 import { useLocation } from "react-router-dom";
-//landmarkicon
-//const [activeSection, setActiveSection] = useState<string | null>(null);
-/* type ProductListProps = {
-    products: Product[];
-    category?: string;
-    onAddToCart?: (product: Product) => void;
-    onViewMore?: (product: Product) => void; // ✅ new prop
-    isFavourite?: boolean;                // ✅ new prop
-   // onToggleFavourite?: (id: string) => void; // ✅ new prop
-      //favourites: FavouriteProduct[];                  // ✅ add this
-     onToggleFavourite?: (product: Product) => void;  // ✅ handler
-
-}; */
-/*
-export type CartItem = {
-    quantity: number;
-      onRemove?: (id: string) => void; // optional callback
-      addedAt?: Date;
-     */
-/* id: string;
-    name: string;
-    modelName:String;
-    originalPrice: number;
-    price: number;
-    imageUrl: string;
-    imageSrc: string; // ✅ Add this line
-    quantity: number;
-    deliveryDates?: string[]; // ✅ Add this line
-    selectedDate?: string | null *//*
-
-};
- */
 
 const AccountsPage: React.FC = () => {
      const { cart } = useCart();
@@ -270,78 +239,8 @@ function MoreMenu({ handleSignOut }: { handleSignOut: () => void }) {
     </Dropdown>
   );
 }
- // Remove a product from favourites
-  /* const handleRemoveFavourite = (id: string) => {
-    setFavourites(prev => prev.filter(p => p.id !== id));
-  }; */
 
-  // Add a product to cart (replace with your cart logic)
-  /* const handleAddToCart = (id: string) => {
-    const product = favourites.find(p => p.id === id);
-    if (product) {
-      // dispatch to cart context or call your cart function
-      console.log("Adding to cart:", product);
-    }
-}; */
-/* const toggleFavourite = (product: FavouriteProduct) => {
-  setFavourites(prev =>
-    prev.some(f => f.id === product.id)
-      ? prev.filter(f => f.id !== product.id)
-      : [...prev, product]
-  );
-}; */
- /* const toggleFavourite = (product: Product) => {
-     console.log("ToggleFavourite called for:", product.id);
-  const fav: FavouriteProduct = {
-     // console.log("Toggling favourite:", product.id);
 
-   id: String(product.id), // normalize
-    image: product.image,
-    productName: product.productName,
-    description: product.description,
-    originalPrice: product.originalPrice,
-    appliedPrice: product.appliedPrice,
-  };
-
-   setFavourites(prev => {
-      const exists = prev.some(f => f.id === fav.id);
-      console.log("ToggleFavourite called for:", fav.id, "exists?", exists);
-
-      const newFavs = exists
-        ? prev.filter(f => f.id !== fav.id)
-        : [...prev, fav];
-      console.log("New favourites:", newFavs.map(f => f.id));
-      return newFavs;
-    });
-     *//* prev.some(f => f.id === fav.id)
-      ? prev.filter(f => f.id !== fav.id)
-      : [...prev, fav] *//*
-
-}; */
-/* const toggleFavourite = (id: string) => {
-  const product = products.find(p => p.id === id);
-  if (!product) return;
-  const fav: FavouriteProduct = { … };
-  setFavourites(prev =>
-    prev.some(f => f.id === fav.id)
-      ? prev.filter(f => f.id !== fav.id)
-      : [...prev, fav]
-  );
-}; */
-//toggleFavourite updates the favourites array consistently
-/* const toggleFavourite = (product: Product) => {
-     console.log("toggleFavourite called for account page:", product.id);
-  setFavourites(prev =>
-    prev.some(f => String(f.id) === String(product.id))
-      ? prev.filter(f => String(f.id) !== String(product.id))
-      : [...prev, product]
-  );
-  console.log("AccountsPage toggleFavourite called for:", product.id);
-}; */
-// ✅ For ProductList
-/* const handleAddToCart = (product: Product) => {
-  console.log("Add to cart:", product);
-}; */
 const handleAddToCart = (product: Product | FavouriteProduct) => {
   dispatch({
     type: "ADD_ITEM",
@@ -725,34 +624,11 @@ useEffect(() => {
 
 <div className="account-content mt-4">
   {activeSection === "profile" && <ProfilePage />}
- {/*  {activeSection === "orders" && <OrderHistory />} */}
+  {activeSection === "orders" && <OrderHistory />}
   {activeSection === "address" && <AddressBook />}
+   {activeSection === "payment" && <div>Payment Preferences Component</div>}
+   {activeSection === "mycredit" && <div>My Credit Component</div>}
 
-    {/* <ProductList
-     products={products}
-     favourites={favourites}
-     onToggleFavourite={toggleFavourite}
-     onAddToCart={handleAddToCart}
-     onViewMore={handleViewMore}
-   /> */}
-   {/*<LaptopPage
-     favourites={favourites}
-     onToggleFavourite={toggleFavourite}
-     onAddToCart={handleAddToCart}
-   /> */}
-    {/* ✅ LaptopPage manages favourites + handlers */}
-    {/* <LaptopPage
-      //favourites={favourites}
-      onToggleFavourite={(product: Product | FavouriteProduct) => {
-        setFavourites(prev =>
-          prev.some(f => f.id === product.id)
-            ? prev.filter(f => f.id !== product.id)
-            : [...prev, product]
-        );
-      }}
-
-      onAddToCart={handleAddToCart}
-    />*/}
    {activeSection === "favourites" && (
      <Favourites
                //favourites={favourites}
@@ -762,24 +638,12 @@ useEffect(() => {
 
      />
    )}
-    {/*{activeSection ==="favourites" && (
-       <Favourites
-       favourites={favourites}   // ✅ just pass the array directly
-        onRemove={(id) => setFavourites(prev => prev.filter(p => p.id !== id))}
-         onAddToCart={(id) => {
-            const fav = favourites.find(p => p.id === id);
-            if (fav) handleAddFavouriteToCart(fav);  // ✅ correct type
-          }}
 
-        //onAddToCart={handleAddToCart}
-           *//* favourites={products.filter(p => favourites.includes(p.id))}
-          onRemove={(id) => setFavourites(prev => prev.filter(fid => fid !== id))}
-          onAddToCart={handleAddToCart} *//*
-         *//* favourites={favourites}
-        onRemove={handleRemoveFavourite}
-        onAddToCart={handleAddToCart} *//*
-      />
-    )}*/}
+ {activeSection === "communications" && <div>Communications Component</div>}
+  {activeSection === "reviews" && <div>Reviews Component</div>}
+  {activeSection === "landmark" && <div>Landmark Rewards Component</div>}
+  {activeSection === "appsettings" && <div>App Settings Component</div>}
+  {activeSection === "help" && <div>Help Component</div>}
 </div>
 
 </div>

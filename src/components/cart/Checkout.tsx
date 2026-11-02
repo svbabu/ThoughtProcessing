@@ -35,6 +35,7 @@ function useCartContext() {
 }
 
  const Checkout: React.FC = () => {
+       const [isPlacingOrder, setIsPlacingOrder] = useState(false);
      /* const { isUserLoggedIn } = useAuth(); */
      /* if not working new line without is isUserLoggedIn so enable old code */
      const [razorpayOrderId, setRazorpayOrderId] = useState<string>("");
@@ -260,8 +261,8 @@ console.log("Cart before filtering:", cart);
     });
 
 const defaultDates = [
-  "01/08/2026", "06/08/2026", "22/08/2026",
-  "23/08/2026", "24/08/2026", "25/08/2026"
+  "01/11/2026", "06/11/2026", "22/11/2026",
+  "23/11/2026", "24/11/2026", "25/11/2026"
 ];
    const updatedCart = cart.map(item => ({
   ...item,
@@ -411,6 +412,8 @@ sessionStorage.removeItem("checkoutState");
 
 
 const handlePlaceOrder = async () => {
+    if (isPlacingOrder) return; // prevent double click
+        setIsPlacingOrder(true);
     // ✅ Guard OTP
      /*  if (!isOtpVerified) {
         toast.error("Please verify OTP before placing order");
@@ -424,6 +427,7 @@ const handlePlaceOrder = async () => {
   const totalAmount = itemAmount + 249 + 10;
 
   // ✅ Step 2: build request (omit orderId)
+    // build orderRequest here using form, cart, selectedDate, etc.
  const orderRequest: Omit<OrderRequestDTO, "orderId"> = {
       //const orderRequest:OrderRequestDTO = {
     //orderId: crypto.randomUUID(), // ✅ frontend generates for now
@@ -452,7 +456,11 @@ const handlePlaceOrder = async () => {
   } catch (err) {
     console.error("Checkout failed:", err);
     alert("Something went wrong while creating order.");
+    toast.error("Something went wrong while creating order.");
   }
+finally {
+      setIsPlacingOrder(false);
+    }
 };
 const isProceedDisabled =!form.fullName || !selectedDate;
     console.log({
@@ -543,6 +551,7 @@ const isProceedDisabled =!form.fullName || !selectedDate;
     </div> {/* PaymentMethodBox div */}
     </div>
     <PaymentMethodBox
+    orderId={ orderId}
     razorpayOrderId={razorpayOrderId}
      totalAmount={cart.reduce((sum, item) => sum + item.appliedPrice * item.quantity, 0) + 249 + 10}
      selectedPayment={selectedPayment}

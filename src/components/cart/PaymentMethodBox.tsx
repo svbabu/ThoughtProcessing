@@ -23,6 +23,7 @@ import {
 } from "@mui/material";
 
 interface PaymentMethodBoxProps {
+    orderId: string| null;         // checkout order id
     razorpayOrderId: string;
       totalAmount: number;
       selectedPayment: string;
@@ -32,6 +33,7 @@ interface PaymentMethodBoxProps {
 }
 //const PaymentMethodBox: React.FC<PaymentMethodBoxProps>= ({ totalAmount }) => {
 export const PaymentMethodBox: React.FC<PaymentMethodBoxProps> = ({
+  orderId,
   razorpayOrderId,
   totalAmount,
   selectedPayment,
@@ -101,11 +103,19 @@ const handlePayment = async () => {
     console.log("UPI ID:", upiId);
     console.log("Total amount (in rupees):", totalAmount);
     console.log("Converted amount (in paise):", amountInPaise);
+
 try {
+     const payload = {
+                orderId: orderId,
+                 "upiId": "user@okaxis",
+                amount: amountInPaise
+              };
+        console.log("UPI Payload =", payload);
       const backendResponse = await fetch("http://localhost:8081/api/payments/upi", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount: amountInPaise }),
+        body: JSON.stringify( payload),
+        //body: JSON.stringify({ amount: amountInPaise }),
       });
 
       if (!backendResponse.ok) {
@@ -180,10 +190,16 @@ else if (selectedPayment === "card") {
 
      const amountInPaise = Math.round(totalAmount * 100);
      try{
+         console.log("Checkout orderId =", orderId);
+          const payload = {
+                         orderId: orderId,
+                         amount: amountInPaise
+                       };
+                 console.log("Card Payload =", payload);
      const backendResponse = await fetch("http://localhost:8081/api/payments/card", {
        method: "POST",
        headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({ amount: amountInPaise }),
+       body: JSON.stringify(payload),
      });
 
      const data = await backendResponse.json();
@@ -211,15 +227,25 @@ else if (selectedPayment === "card") {
               })
           .then((res) => res.json())
           .then((verifyData) => {
+              console.log("VERIFY RESPONSE =", verifyData);
+                 console.log("VERIFY STATUS =", verifyData.status);
               const orderId = verifyData.orderId || response.razorpay_order_id || options.order_id;
+               console.log("ORDER ID =", orderId);
+
                const paymentIdParam = verifyData.paymentId ? `&payment_id=${verifyData.paymentId}` : "";
                if (verifyData.status === "captured" || verifyData.status === "success") {
+                    console.log("GOING TO SUCCESS PAGE");
                    window.location.href = `/order-success?order_id=${orderId}${paymentIdParam}&amount=${verifyData.amount}`;
                                                          /*  window.location.href = "/order-success?order_id=" + response.razorpay_order_id; */
                                                          /*  window.location.href = "/order-success?order_id=" + verifyData.orderId + "&payment_id=" + verifyData.paymentId; */
                                                           } else if (verifyData.status === "pending") {
+                                                              console.log("GOING TO PROCESSING PAGE");
                                                           window.location.href = "/order-processing?order_id=" + verifyData.orderId;
                                                         } else {
+                                                             console.log(
+                                                                     "GOING TO RETRY PAGE",
+                                                                     verifyData
+                                                                  );
                                                            // Card/NetBanking failures → go back to checkout page
                                                             window.location.href = "http://localhost:8080/checkout?retry=true";
                                                           /* window.location.href = "/order-failed?order_id=" + verifyData.orderId; */
@@ -259,16 +285,28 @@ try {
   }
 
 else if (selectedPayment === "netbanking") {
+    if (!orderId) {
+      alert("Order ID not found. Please try checkout again.");
+      return;
+    }
     if (!selectedBank) {
       alert("Please select a bank before proceeding");
       return;
     }
 const amountInPaise = Math.round(totalAmount * 100);
   try {
+      console.log("Checkout orderId =", orderId);
+
+      const payload = {
+        orderId: orderId,
+        bank: selectedBank,
+        amount: amountInPaise
+      };
+console.log("NetBanking Payload =", payload);
     const backendResponse = await fetch("http://localhost:8081/api/payments/netbanking", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ bank: selectedBank, amount: amountInPaise }),
+      body: JSON.stringify( payload),
     });
 
     if (!backendResponse.ok) {
@@ -302,6 +340,15 @@ const amountInPaise = Math.round(totalAmount * 100);
                       })
                   .then((res) => res.json())
                             .then((verifyData) => {
+                                 console.log(
+                                      "VERIFY RESPONSE =",
+                                      verifyData
+                                   );
+
+                                   console.log(
+                                      "VERIFY STATUS =",
+                                      verifyData.status
+                                   );
                               const orderId = verifyData.orderId || response.razorpay_order_id || options.order_id;
                                const paymentIdParam = verifyData.paymentId ? `&payment_id=${verifyData.paymentId}` : "";
                                              if (verifyData.status === "captured" || verifyData.status === "success") {
@@ -864,6 +911,7 @@ return (
                 total={totalAmount}
                 selectedBank={selectedBank}
                 selectedPayment={selectedPayment}
+                 razorpayOrderId={ razorpayOrderId}
               />
             </div>
 

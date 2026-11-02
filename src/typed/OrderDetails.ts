@@ -82,12 +82,31 @@ router.get("/:orderId", async (req: Request, res: Response) => {
 
      // Fetch timeline
      const historyResult = await pool.query(
-       `SELECT status, status_time, remarks
+       `SELECT history_id, order_id, status, status_time, remarks
         FROM order_history
         WHERE order_id = $1
         ORDER BY status_time`,
        [orderId]
      );
+ // Fetch payments
+ const paymentsResult = await pool.query(
+   `SELECT
+      id,
+      bank,
+      amount,
+      status,
+      order_id AS "orderId",
+      razorpay_order_id AS "razorpayOrderId",
+      payment_id AS "paymentId",
+      razorpay_payment_id AS "razorpayPaymentId",
+      method,
+      contact,
+      email,
+      created_at AS "createdAt"
+    FROM payment
+    WHERE order_id = $1`,
+   [orderId]
+ );
 
      res.json({
        ...orderResult.rows[0],
@@ -107,10 +126,31 @@ router.get("/:orderId", async (req: Request, res: Response) => {
          discount: item.discount
        })),
        timeline: historyResult.rows.map(row => ({
+         historyId: row.history_id,
+         orderId: row.order_id,       // ✅ include orderId from history table
          status: row.status,
+         statusTime: row.status_time, // ✅ direct field for frontend
          date: row.status_time,
          remarks: row.remarks
-       }))
+       })),
+   payments: paymentsResult.rows.map(p => ({
+       id: p.id,
+       bank: p.bank,
+       amount: p.amount,
+       status: p.status,
+       orderId: p.orderId,
+       razorpayOrderId: p.razorpayOrderId,
+       paymentId: p.paymentId,
+       razorpayPaymentId: p.razorpayPaymentId,
+       method: p.method,
+      // upiId: p.upiId,
+       transactionId: p.transactionId,
+
+       contact: p.contact,
+       email: p.email,
+        createdAt: p.createdAt
+
+         })),
      });
    } catch (err) {
      console.error("Error fetching order:", err);

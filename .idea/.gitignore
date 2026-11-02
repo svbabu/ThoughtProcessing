@@ -10,6 +10,7 @@ nano .gitignore
 
 # Dependencies
 node_modules/
+server.js
 # Environment files
 .env
 .env.local

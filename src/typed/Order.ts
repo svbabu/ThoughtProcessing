@@ -19,6 +19,11 @@ export interface Payment{
 id:number;
 amount:number;
 method:string;
+paymentId: string;
+orderId: string;
+status: string;   // <-- add this
+upiId?: string;
+cardDetails?: string;
     }
 
 export interface ShippingAddress {

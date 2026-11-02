@@ -19,13 +19,15 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import FilteredOrders from "./FilteredOrders";
 import  { Order }  from '../../typed/Order';
+import {OrderDto} from '../../typed/OrderDto';
 //import { useAuth } from "./AuthProvider"; // centralized auth context
 import { getAuth } from "firebase/auth";
 
 
 const OrderHistory: React.FC = () => {
   const [timeFilter, setTimeFilter] = useState("all");
-  const [orders, setOrders] = useState<Order[]>([]);
+  //const [orders, setOrders] = useState<Order[]>([]);
+ const [orders, setOrders] = useState<OrderDto[]>([]);
 const [loading, setLoading] = useState(false);
  const [error, setError] = useState<string | null>(null);
 
@@ -37,8 +39,8 @@ useEffect(() => {
   setLoading(true);
   setError(null);
 
-  axios
-    .get(`http://localhost:8081/api/orders/user/${uid}?range=${timeFilter}`)
+  /* axios.get(`http://localhost:8081/api/orders/user/${uid}?range=${timeFilter}`) */
+    axios.get<OrderDto[]>(`http://localhost:8081/api/orders/user/${uid}?range=${timeFilter}`)
     .then(res => setOrders(res.data))
     .catch(err => {
       console.error("Error fetching orders:", err);
@@ -46,6 +48,7 @@ useEffect(() => {
     })
     .finally(() => setLoading(false));   // <-- important
 }, [timeFilter]);
+//axios.get<OrderDto[]>(`http://localhost:8081/api/orders/user/${uid}?range=${timeFilter}`)
 
 
   return (

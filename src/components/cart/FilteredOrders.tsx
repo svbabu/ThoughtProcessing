@@ -2,6 +2,7 @@
 import React from "react";
 import axios from 'axios';
 import  { Order }  from '../../typed/Order';
+import {OrderDto} from '../../typed/OrderDto';
 //import {OrderItem} from '/../../typed/Order';
 import { getImageSrc } from "../../utils/getImageSrc";
 import {
@@ -27,13 +28,14 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useNavigate } from "react-router-dom";
 
 interface FilteredOrdersProps {
-  orders?: Order[];
+  //orders?: Order[];
+  orders?:OrderDto[];
  // items:OrderItem[];
 
 }
 
+/* const FilteredOrders: React.FC<FilteredOrdersProps> = ({ orders = [] }) => { */
 const FilteredOrders: React.FC<FilteredOrdersProps> = ({ orders = [] }) => {
-
    const navigate = useNavigate();
 const formatDate = (dateStr?: string) => {
   if (!dateStr) return "—"; // no date

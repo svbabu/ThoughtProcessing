@@ -21,7 +21,8 @@ import  hpEnvyx360 from '@img/hpenvyx360.png';
 import  acerSwift from '@img/acerswift.png';
 import FavouriteItem from "./FavouriteItem";
 import {Product,FavouriteProduct} from '../../typed/Product';
-import {Order,OrderItem} from '../../typed/Order';
+//import {Order,OrderItem} from '../../typed/Order';
+import {OrderDto,OrderItemDTO,PaymentDto} from '../../typed/OrderDto';
 import { getImageSrc } from "../../utils/getImageSrc";
 import  OrderStatusTimeline from "./ OrderStatusTimeline" ;
 import {
@@ -49,10 +50,11 @@ from "@mui/lab";
 } */
 
 const OrderDetails: React.FC = () => {
-  const { orderId } = useParams();
-  const [order, setOrder] = useState<Order | null>(null);
+ const { orderId } = useParams();
+  const{razorpayOrderId}=useParams();
+ // const [order, setOrder] = useState<Order | null>(null);
 
-
+const [order, setOrder] = useState<OrderDto | null>(null);
  const productImages: Record<string, string> = {
         "Laptop": latop,
         "Mobile Phone": mobile,
@@ -75,17 +77,22 @@ const OrderDetails: React.FC = () => {
  useEffect(() => {
    const fetchOrder = async () => {
      try {
-       const res = await axios.get(`http://localhost:8081/api/orders/${orderId}`);
-       const orderData: Order = res.data;
+           const res=await axios.get<OrderDto>(`http://localhost:8081/api/orders/${orderId}`)
+       //const res = await axios.get(`http://localhost:8081/api/orders/${orderId}`);
+
+      // const orderData: Order = res.data;
+      const orderData: OrderDto = res.data;
 
        // No need to enrich with products if order items already have details
-       setOrder(orderData);
+     setOrder(orderData);
+      //setOrder(res.data);
      } catch (err) {
        console.error("Failed to fetch order", err);
      }
    };
 
    fetchOrder();
+   /* },[razorpayOrderId]); */
  }, [orderId]);
 
 
@@ -110,11 +117,13 @@ return (
 
     {/* Order ID row */}
     <Typography variant="subtitle1" gutterBottom>
-      Order ID: {order.orderId}
+      {/* Order ID: {order.orderId} */}
+      Order ID: {order.razorpayOrderId}
     </Typography>
 
     {/* Items list */}
-    {order.items.map((item: OrderItem) => {
+   {/*  {order.items.map((item: OrderItem) => { */}
+       {order.items.map((item: OrderItemDTO) => {
       console.log("Image src:", getImageSrc(item)); // logs each item’s URL
       return (
         <Box
@@ -222,7 +231,26 @@ return (
              <Grid size={{ xs: 6 }}><Typography variant="subtitle1">₹{order.totalAmount}</Typography></Grid>
            </Grid>
          </Box>
- <Box sx={{ mt: 3 }}>
+
+         <Box sx={{ mt: 3 }}>
+           <Typography variant="h6">Payment Method</Typography>
+           <Grid container spacing={1}>
+             <Grid size={{ xs: 6 }}><Typography>Method:</Typography></Grid>
+             <Grid size={{ xs: 6 }}>
+               {order.payments?.[0]?.status === 'captured'
+                 ? <Typography>{order.payments?.[0]?.method?.toUpperCase()}</Typography>
+                 : <Typography>Awaiting payment</Typography>}
+             </Grid>
+
+             <Grid size={{ xs: 6 }}><Typography>Amount:</Typography></Grid>
+             <Grid size={{ xs: 6 }}>
+               {order.payments?.[0]?.status === 'captured'
+                 ? <Typography>₹{order.payments?.[0]?.amount}</Typography>
+                 : <Typography>—</Typography>}
+             </Grid>
+           </Grid>
+         </Box>
+ {/* <Box sx={{ mt: 3 }}>
       <Typography variant="h6">Payment Method</Typography>
       <Grid container spacing={1}>
         <Grid size={{ xs: 6 }}><Typography>Method:</Typography></Grid>
@@ -231,7 +259,7 @@ return (
         <Grid size={{ xs: 6 }}><Typography>Amount:</Typography></Grid>
         <Grid size={{ xs: 6 }}><Typography>₹{order.payments?.[0]?.amount}</Typography></Grid>
       </Grid>
-    </Box>
+    </Box> */}
   </Grid>
 </Grid>
 

@@ -118,7 +118,7 @@ return (
     {/* Order ID row */}
     <Typography variant="subtitle1" gutterBottom>
       {/* Order ID: {order.orderId} */}
-      Order ID: {order.razorpayOrderId}
+      Order ID: {order.orderId}
     </Typography>
 
     {/* Items list */}
@@ -245,7 +245,7 @@ return (
              <Grid size={{ xs: 6 }}><Typography>Amount:</Typography></Grid>
              <Grid size={{ xs: 6 }}>
                {order.payments?.[0]?.status === 'captured'
-                 ? <Typography>₹{order.payments?.[0]?.amount}</Typography>
+                 ? <Typography>₹{order.payments?.[0]?.amount/100}</Typography>
                  : <Typography>—</Typography>}
              </Grid>
            </Grid>

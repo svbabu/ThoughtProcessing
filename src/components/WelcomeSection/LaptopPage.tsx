@@ -56,6 +56,10 @@ function mergeProductsWithOffers(specs: ProductWithSpecs[], offers: Product[]): 
   return specs.map(spec => {
     //const offer = offers.find(o => o.id === spec.id.toString());
    const offer = offers.find(o => o.id.toString() === spec.id.toString());
+       console.log("Laptop page MODEL =", spec.modelName);
+       console.log("SPEC IMAGE URL =", spec.imageUrl);
+       console.log("OFFER IMAGE SRC =", offer?.imageSrc);
+
     const basePrice = spec.basePrice ?? 0;
     const discountPct = offer?.discountPercentage ?? 0;
     const appliedPrice = basePrice - (basePrice * discountPct / 100);
@@ -79,8 +83,10 @@ function mergeProductsWithOffers(specs: ProductWithSpecs[], offers: Product[]): 
      /*  price: offer?.appliedPrice ?? spec.basePrice ?? 0, */
       saved: offer?.saved ?? 0,
       imageUrl: spec.imageUrl,
-      imageSrc: offer?.imageSrc ?? spec.imageUrl ?? "/img/default-laptop.png",
-      image: offer?.image ?? "/img/default-laptop.png",
+      imageSrc:  spec.imageUrl?? "/img/default-laptop.png",
+      image: spec.imageUrl?? "/img/default-laptop.png",
+      //imageSrc: offer?.imageSrc ?? spec.imageUrl ?? "/img/default-laptop.png",
+     // image: offer?.image ??offer?.imageSrc ?? spec.imageUrl ?? "/img/default-laptop.png",
       discount: offer?.discount ?? 0,
       navigateTo: "/laptops",
       deliveryDates: [],
@@ -132,6 +138,9 @@ type LaptopPageProps = {
 
 
     const handleAddToCart = (product: Product | FavouriteProduct ) => {
+        console.log("from laptop page image:",product.image);
+        console.log("from laptop page imageSrc:",product.imageSrc);
+        console.log("from laptop page imageUrl:",product.imageUrl);
         dispatch({
             type: 'ADD_ITEM',
             payload: {
@@ -147,15 +156,17 @@ type LaptopPageProps = {
               price: product.appliedPrice ?? product.originalPrice, // ✅ normalize
               discountPercentage: product.discountPercentage ?? null,
               saved: product.saved??0,
-              imageSrc: product.imageSrc || latop,
+              //imageSrc: product.imageSrc || latop,
+              imageSrc:product.imageSrc|| latop,
               quantity: 1,
               deliveryDates: product.deliveryDates ?? [],
               selectedDate: product.selectedDate ?? null,
-              image: "",
+              image: product.imageSrc|| latop,
               //productName: "",
               name:"",
               /* price: product.appliedPrice ?? product.originalPrice, */ // ✅ normalize here
               imageUrl: product.image || latop,
+              //imageUrl:product.imageSrc || latop,
               date: "",
               //modelName:"",
               }

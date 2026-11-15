@@ -12,6 +12,7 @@ interface CartItemProps extends Product {
     price: number,
     image: string,
     imageSrc: string,
+    imageUrl?: string;
     quantity?: number,
     deliveryDates?: string[],
     onRemove?: (id: string) => void,
@@ -33,6 +34,7 @@ export const CartItem: React.FC<CartItemProps> = ({
                                                       originalPrice,  // ✅ new
                                                       price,
                                                       imageSrc,
+                                                      imageUrl,
                                                       quantity,
                                                       deliveryDates,
                                                       onRemove,
@@ -59,7 +61,7 @@ export const CartItem: React.FC<CartItemProps> = ({
     return (
         <div className="cart-details p-3 border rounded">
             <div className="cart-item">
-            <img src={imageSrc || latop} alt={productName} className="cart-image"/>
+            <img src={imageSrc ||  imageUrl || latop} alt={productName} className="cart-image"/>
             {/*  <img src={image|| latop} alt={productName} className="cart-image" />*/}
             <div className="cart-details">
                 <h4 className="mb-2 d-flex justify-content-between">{productName}</h4>

@@ -21,9 +21,21 @@ import projectthree from '@img/project-3.png';
 import projectfour from '@img/project-4.png';
 import projectfive from '@img/project-5.png';
 import projectsix from '@img/project-6.png';
-import latop from'@img/latop.png'
-import mobile from '@img/mobile.png'
-import shoes from'@img/shoes.png'
+
+import latop from '@img/latop.png';
+import mobile from '@img/mobile.png';
+import shoes from '@img/shoes.png';
+
+import asusZenbook from '@img/asuszenbook.png';
+import dellXps from '@img/dellxps.png';
+import macbookPro from '@img/macbookpro.png';
+import hpSpectre from '@img/hpspectre.png';
+import lenovoThinkpad from '@img/lenovothinkpad.png';
+import macbookAir from '@img/macbookair.png';
+import dellLatitude from '@img/delllatitude.png';
+import msiStealth from '@img/msistealth.png';
+import  hpEnvyx360 from '@img/hpenvyx360.png';
+import  acerSwift from '@img/acerswift.png';
 
 import teamone from '@img/team-1.png';
 import teamtwo from '@img/team-2.png';
@@ -53,12 +65,25 @@ const Projects: React.FC = () => {
         discountPercentage: number;
         appliedPrice: number;
     };
-
+const normalizeKey = (name: string) =>
+  name.toLowerCase().replace(/\s+/g, ""); // "Dell XPS" → "dellxps"
+// product.ts
     const [offers, setOffers] = useState<Offer[]>([]);
     const productImages: Record<string, string> = {
         "Laptop": latop,
         "Mobile Phone": mobile,
         "Shoes": shoes,
+        "Asus Zenbook": asusZenbook,
+         "Dell XPS": dellXps,
+                     "MacBook Pro": macbookPro,
+                      "HP Spectre": hpSpectre,
+                      "Lenovo Thinkpad": lenovoThinkpad,
+                      "MacBook Air": macbookAir,
+                      "Dell Latitude": dellLatitude,
+                      "MSI Stealth": msiStealth,
+                      "HP Envy x360": hpEnvyx360,
+                      "Acer Swift": acerSwift,
+
 
     };
     const navigate = useNavigate();

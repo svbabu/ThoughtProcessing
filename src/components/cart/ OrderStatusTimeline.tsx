@@ -13,21 +13,33 @@ interface TimelineStep {
   statusTime?: string;
   remarks?: string;
 }
+const allStatuses = [
+  "PLACED",
+  "PACKED",
+  "SHIPPED",
+  "OUT_FOR_DELIVERY",
+  "DELIVERED"
+];
 
 const statusConfig: Record<string, { icon: JSX.Element; color: "success" | "primary" | "grey" }> = {
-  PLACED: { icon: <ShoppingCartIcon />, color: "grey" },
-  PACKED: { icon: <InventoryIcon />, color: "primary" },
-  SHIPPED: { icon: <LocalShippingIcon />, color: "primary" },
-  DELIVERED: { icon: <CheckCircleIcon />, color: "success" },
+
+
+ PLACED: { icon: <span />, color: "success" },
+   PACKED: { icon: <span />, color: "grey" },
+   SHIPPED: { icon: <span />, color: "grey" },
+   DELIVERED: { icon: <span />, color: "success" },
 };
 
 const formatDate = (date?: string) =>
   date ? new Date(date).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" }) : "";
 
-const OrderStatusTimeline: React.FC<{ timeline: TimelineStep[] }> = ({ timeline }) => (
+const OrderStatusTimeline: React.FC<{ timeline: TimelineStep[] }> = ({ timeline }) => {
+  console.log("timeline length =", timeline.length);
+  console.log("timeline =", timeline);
+  return(
   <Timeline>
     {timeline.map((step, index) => {
-      const { icon, color } = statusConfig[step.status] || { icon: <ShoppingCartIcon />, color: "grey" };
+      const { icon, color } = statusConfig[step.status] || { icon: <span />, color: "grey" };
       return (
         <TimelineItem key={index}>
           <TimelineSeparator>
@@ -42,7 +54,7 @@ const OrderStatusTimeline: React.FC<{ timeline: TimelineStep[] }> = ({ timeline 
         </TimelineItem>
       );
     })}
-  </Timeline>
-);
+  </Timeline>);
+};
 
 export default OrderStatusTimeline;

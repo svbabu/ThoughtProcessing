@@ -8,6 +8,11 @@ import dellXps from '@img/dellxps.png';
 import macbookPro from '@img/macbookpro.png';
 import hpSpectre from '@img/hpspectre.png';
 import lenovoThinkpad from '@img/lenovothinkpad.png';
+import macbookAir from '@img/macbookair.png';
+import dellLatitude from '@img/delllatitude.png';
+import msiStealth from '@img/msistealth.png';
+import hpEnvyx360 from '@img/hpenvyx360.png';
+import acerSwift from '@img/acerswift.png';
 import { ShippingAddressDto } from '../typed/ShippingAddressDto';
 export type Product = {
 
@@ -223,6 +228,8 @@ export type CartItemType = {
     price: number;
     quantity: number;
     imageUrl: string;
+    image?:string;
+    imageSrc?:string;
     description?: string; // optional
 
 
@@ -231,11 +238,21 @@ const normalizeKey = (name: string) =>
   name.toLowerCase().replace(/\s+/g, ""); // "Dell XPS" → "dellxps"
 // product.ts
 export const imageMap: Record<string, string> = {
-  "dellxps": dellXps,
+     "Asus Zenbook": asusZenbook,
+      "Dell XPS": dellXps,
+      "MacBook Pro": macbookPro,
+      "HP Spectre": hpSpectre,
+      "Lenovo Thinkpad": lenovoThinkpad,
+      "MacBook Air": macbookAir,
+      "Dell Latitude": dellLatitude,
+      "MSI Stealth": msiStealth,
+      "HP Envy x360": hpEnvyx360,
+      "Acer Swift": acerSwift,
+ /*  "dellxps": dellXps,
    "macbookpro": macbookPro,
    "hpspectre": hpSpectre,
    "lenovothinkpad": lenovoThinkpad,   // ✅ fixed
-   "asuszenbook": asusZenbook,
+   "asuszenbook": asusZenbook, */
 
 };
 export type ProductOfferResponseDto = {
@@ -249,6 +266,7 @@ export type ProductOfferResponseDto = {
     discountPercentage: number;
     productDescription: string;
     price:number;// ✅ add this
+    imageUrl: string;
 
 };
 export type ProductWithSpecs = {
@@ -267,16 +285,65 @@ export type ProductWithSpecs = {
     color: string;
 
 };
+export const mapDtoToProduct = (
+  dto: ProductOfferResponseDto
+): Product => {
 
-export const mapDtoToProduct = (dto: ProductOfferResponseDto): Product => ({
-  id: dto.id?.toString() ?? Math.random().toString(),
+  console.log("MODEL =", dto.modelName);
+  console.log("NORMALIZED =", normalizeKey(dto.modelName));
+  console.log(
+    "IMAGE MAP RESULT =",
+    imageMap[normalizeKey(dto.modelName)]
+  );
+
+  return {
+    id: dto.id?.toString() ?? Math.random().toString(),
+    productName: dto.productName,
+    modelName: dto.modelName,
+    title: dto.modelName,
+    description: dto.productDescription,
+
+    image:
+      imageMap[normalizeKey(dto.modelName)] ||
+          "@img/asuszenbook.png",
+      //"/img/default-laptop.png",
+
+    imageSrc:
+      imageMap[normalizeKey(dto.modelName)] ||
+      "@img/asuszenbook.png",
+
+    imageUrl:
+      imageMap[normalizeKey(dto.modelName)] ||
+      "@img/asuszenbook.png",
+
+    originalPrice: dto.basePrice,
+    appliedPrice: dto.appliedPrice,
+    discountPercentage: dto.discountPercentage,
+
+    discount: dto.discountPercentage,
+    navigateTo: "/laptops",
+    deliveryDates: [],
+    selectedDate: null,
+    saved: 0,
+    basePrice: dto.basePrice,
+    price: dto.appliedPrice ?? dto.basePrice ?? 0,
+    name: ""
+  };
+};
+/* export const mapDtoToProduct = (dto: ProductOfferResponseDto): Product => ({
+    console.log("MODEL =", dto.modelName);
+    console.log("NORMALIZED =", normalizeKey(dto.modelName));
+    console.log(
+      "IMAGE MAP RESULT =",
+      imageMap[normalizeKey(dto.modelName)]),
+  id: dto.id?.toString() ?? Math.random().toString();
   productName: dto.productName,
    modelName: dto.modelName,
    title:dto.modelName,
   description: dto.productDescription,     // ✅ product description for product card
   offerLabel: dto.offerDescription,        // ✅ offer description for banner
-  /* title: dto.productName, */
-  /* offerdescription: dto.offerDescription, */
+   *//* title: dto.productName, *//*
+   *//* offerdescription: dto.offerDescription, *//*
   originalPrice: dto.basePrice,
   appliedPrice: dto.appliedPrice,
   discountPercentage: dto.discountPercentage,
@@ -284,6 +351,7 @@ export const mapDtoToProduct = (dto: ProductOfferResponseDto): Product => ({
   image:imageMap[normalizeKey(dto.modelName)] || "/img/default-laptop.png",
 
   imageSrc: imageMap[normalizeKey(dto.modelName)] || "@img/asuszenbook.png",
+  imageUrl:imageMap[normalizeKey(dto.modelName)] || "@img/asuszenbook.png",
   discount: dto.discountPercentage,
   navigateTo: "/laptops",
   deliveryDates: [],
@@ -291,9 +359,10 @@ export const mapDtoToProduct = (dto: ProductOfferResponseDto): Product => ({
   saved: 0,
   basePrice:dto.basePrice,
   price: dto.appliedPrice ?? dto.basePrice ?? 0,
-  name:""
+  name:"",
 
-});
+
+}); */
 // Product.ts (frontend)
 
 /* export type FavouriteProduct = {
@@ -406,7 +475,11 @@ export type OrderResponseDTO = {
 };
 
 //2. Map Product → OrderItemDTO
-export const mapProductToOrderItem = (product: Product): OrderItemDTO => ({
+/* export const mapProductToOrderItem = (product: Product):
+OrderItemDTO => ({
+console.log("PRODUCT =", product);
+console.log("PRODUCT IMAGE SRC =", product.imageSrc);
+console.log("PRODUCT IMAGE URL =", product.imageUrl);
   productId: product.id,
     productName: product.productName ?? "",   // fallback
     modelName: product.modelName ?? "",
@@ -419,7 +492,29 @@ export const mapProductToOrderItem = (product: Product): OrderItemDTO => ({
     discountPercentage: product.discountPercentage ?? 0,
     offerId: product.offerId ?? ""                  // use actual backend offerId, not label
     //offerId: product.offerLabel ?? ""
-});
+}); */
+export const mapProductToOrderItem = (
+  product: Product
+): OrderItemDTO => {
+
+  console.log("PRODUCT =", product);
+  console.log("PRODUCT IMAGE SRC =", product.imageSrc);
+  console.log("PRODUCT IMAGE URL =", product.imageUrl);
+
+  return {
+    productId: product.id,
+    productName: product.productName ?? "",
+    modelName: product.modelName ?? "",
+    description: product.description ?? "",
+    imageUrl: product.imageUrl || product.imageSrc || "",
+    quantity: product.quantity ?? 1,
+    price: product.appliedPrice ?? 0,
+    basePrice: product.originalPrice ?? 0,
+    appliedPrice: product.appliedPrice ?? 0,
+    discountPercentage: product.discountPercentage ?? 0,
+    offerId: product.offerId ?? "",
+  };
+};
 /*
 const eligibleProducts: Product[] = selectedDate
   ? updatedCart.filter(item =>

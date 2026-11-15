@@ -85,7 +85,7 @@ const OrderSuccess: React.FC = () => {
         new Date().toLocaleString();
      const contact=queryParams.get("contact");
      const email=queryParams.get("email");
-     const transactionId=orderData?.acquirer_data?.transactionId
+     const transactionId=orderData?.acquirer_data?.transactionId;
      const rrn=orderData?.acquirer_data?.rrn;
       /* const merchantName=orderData?.merchantName;  */
      /*  const merchantName=queryParams.get("merchantName");  */
@@ -432,7 +432,7 @@ const handlePayAgain = async () => {
        <div style={{ background: "#e6ffed", padding: "12px", borderRadius: "8px", display: "flex",
            alignItems: "center", justifyContent: "space-between" }}
             >
-        <span> Paid ₹{orderData?.amount || amount} to <strong>{orderData?.merchantName || shopName}
+        <span> Paid ₹{orderData?.amount || amount/100} to <strong>{orderData?.merchantName || shopName}
         </strong> <FaCheckCircle color="green" /> </span> </div>
 
       {/* Method-specific details */}
@@ -714,7 +714,7 @@ onClick={handlePayAgain} // 👈 attach the retry action
                                                       borderRadius: "8px",
 
                                                     }}>
-               <span>Transaction ID: <strong>{orderData.transactionId}</strong></span>
+               <span>Transaction ID: <strong>{orderData?.transactionId}</strong></span>
              </div>
            )}
             {orderData?.rrn && (
@@ -732,7 +732,15 @@ onClick={handlePayAgain} // 👈 attach the retry action
          </>
        )}
 
-
+<div className="summary-row"   style={{
+                                             fontWeight: "normal",
+                                             background: "#f0f0f0",
+                                             border: "none",
+                                             padding: "10px 20px",
+                                             borderRadius: "8px",
+                                           }}>
+      <span>Transaction ID: {orderData?.transactionId}</span>
+    </div>
     <div className="summary-row"   style={{
                                              fontWeight: "normal",
                                              background: "#f0f0f0",

@@ -25,6 +25,18 @@ import { useCart } from '../cart/CartContext';
 import {CartItem } from '@cart/CartItem'; // adjust the path as needed
 import { format } from "date-fns";
 import latop from "@img/latop.png";
+import asusZenbook from '@img/asuszenbook.png';
+import dellXps from '@img/dellxps.png';
+import macbookPro from '@img/macbookpro.png';
+import hpSpectre from '@img/hpspectre.png';
+import lenovoThinkpad from '@img/lenovothinkpad.png';
+import macbookAir from '@img/macbookair.png';
+import dellLatitude from '@img/delllatitude.png';
+import msiStealth from '@img/msistealth.png';
+import  hpEnvyx360 from '@img/hpenvyx360.png';
+import  acerSwift from '@img/acerswift.png';
+//import {productImages}  from '../../productImages';
+import { getImageSrc } from "../../utils/getImageSrc";
 import {CartSummary} from '@cart/CartSummary';
 import PaymentMethodBox from '@cart/PaymentMethodBox';
 
@@ -441,7 +453,12 @@ const handlePlaceOrder = async () => {
       method: selectedPayment,
     },
   };
+console.log("ORDER REQUEST =", orderRequest);
 
+orderRequest.items.forEach((item) => {
+  console.log("MODEL =", item.modelName);
+  console.log("IMAGE URL =", item.imageUrl);
+});
   try {
     // ✅ Step 3: call backend
     const response = await checkoutOrder(orderRequest);
@@ -655,7 +672,11 @@ const isProceedDisabled =!form.fullName || !selectedDate;
                                                <div key={item.id ?? index} className="eligible-item">
 
                                                      <div className="cart-row">
-                                                       <img src={item.imageSrc} alt={item.productName} className="cart-image" />
+
+                                                       {/* <img src={item.imageSrc}  */}
+                                                       <img
+                                                       src={getImageSrc(item)}
+                                                       alt={item.productName} className="cart-image" />
                                                        <div className="cart-info">
                                                          <div className="mb-0">Name: {item.modelName}</div>
                                                          <div className="mb-0">Des: {item.description}</div>
@@ -736,7 +757,11 @@ const isProceedDisabled =!form.fullName || !selectedDate;
                            <div key={item.id ?? index} className="order-item">
                              <div className="cart-row">
                                {/* If you want to show image, uncomment below */}
-                               <img src={item.imageSrc} alt={item.productName} className="cart-image" />
+                               {/* <img src={Item.imageSrc} */}
+                                <img
+                                src={getImageSrc(item)}
+                                alt={item.productName}
+                                className="cart-image" />
                                <div className="cart-info">
                                  <div className="mb-0">Name: {item.modelName}</div>
                                  <div className="mb-0">Des: {item.description}</div>

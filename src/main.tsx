@@ -37,10 +37,11 @@ import { LaptopPage } from './components/WelcomeSection/LaptopPage';
 import { MobilePage } from './components/WelcomeSection/MobilePage';
 import { ShoesPage} from './components/WelcomeSection/ShoesPage';
 import { FavouritesProvider } from "@cart/FavouritesContext";
-
-
-
-
+//Admin module
+import WarehouseDashboard from "./admin/WarehouseDashboard";
+//import WarehouseDashboard from "@/admin/WarehouseDashboard";
+import OrderQueue from "./admin/OrderQueue";
+import WarehouseOrderDetails from "./admin/WarehouseOrderDetails";
 // adjust path as needed
 
 
@@ -115,6 +116,33 @@ if (container) {
 
                 <Route path="/orders" element={<FilteredOrders />} />
                   <Route path="/orders/:orderId" element={<OrderDetails />} />
+
+
+
+           <Route
+             path="/admin/dashboard"
+             element={
+               <Layout showNavbar={false}>
+                 <WarehouseDashboard />
+               </Layout>
+             }
+           />
+           <Route
+             path="/admin/orders"
+             element={
+               <Layout showNavbar={false}>
+                 <OrderQueue />
+               </Layout>
+             }
+           />
+           <Route
+             path="/admin/orders/:orderId"
+             element={
+               <Layout showNavbar={false}>
+                 <WarehouseOrderDetails />
+               </Layout>
+             }
+           />
 
             </Routes>
 
